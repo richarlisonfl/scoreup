@@ -45,40 +45,55 @@ O desenvolvimento do **ScoreUp** segue uma estrutura modular e colaborativa, com
 
 ## 🗃️ Modelagem Atual do Banco de Dados
 
-A modelagem foi feita pensando na escalabilidade e na clareza da lógica de pontuação. As principais entidades são:
+ A modelagem do banco foi projetada para refletir fielmente a lógica competitiva dos jogos. As principais tabelas e seus propósitos são:
 
-- **Instituição**: representa os campi participantes.
-- **Equipe**: grupo de alunos inscritos em uma modalidade.
-- **Modalidade**: nome e tipo (individual ou coletiva) do esporte ou competição.
-- **Partida**: confronto entre equipes ou participantes.
-- **Pontuação**: resultado da partida convertido em pontos.
+   - **Campus**: representa os campi participantes, indicando inclusive se são sede.
+   - **Modalidade**: define os esportes e suas regras de pontuação.
+   - **Usuário**: participantes com funções administrativas ou de registro de dados.
+   - **Time**: equipes formadas pelos campi em determinada modalidade.
+   - **Atleta**: integrantes dos times.
+   - **Local**: locais dos jogos.
+   - **Partida**: confrontos entre times, incluindo data, local e fase.
+   - **Resultado**: placares e dados estatísticos registrados.
+   - **Classificação das Modalidades**: ranking por modalidade com estatísticas completas.
+   - **Classificação Geral**: somatório dos desempenhos dos campi em todas as modalidades.
+   - **Notícia**: publicação de comunicados dentro do sistema.
 
-**Relacionamentos:**
+   Também foram criadas **procedures** e **triggers** para garantir:
+   - Atualização automática das classificações após cada resultado inserido.
+   - Inicialização de rankings quando uma nova modalidade é cadastrada.
 
-- Cada **instituição** pode ter várias **equipes**.
-- Cada **modalidade** pode ter várias **partidas**.
-- Cada **partida** gera uma **pontuação** associada à equipe e à instituição.
-
-> ⚠️ *[Inserir aqui um diagrama ER ou link para ele, se disponível.]*
+   > ⚠️ *A estrutura completa pode ser consultada no diretório `/sql` com os scripts de criação, procedures e triggers.*
 
 ---
 
 ## ⚙️ Lógicas de Pontuação (em construção)
 
-Esta seção será atualizada conforme as regras específicas forem sendo implementadas, por exemplo:
+O ScoreUp conta com uma trigger chamada `after_resultado_insert` que é acionada automaticamente após o registro de um resultado. Ela é responsável por:
 
-- Critérios de desempate.
-- Pontos extras por comportamento.
-- Classificação por grupos ou chaves eliminatórias.
+- Identificar a modalidade e times envolvidos.
+- Atualizar estatísticas na tabela `ClassificacaoModalidade`.
+- Discriminar vitórias, empates e derrotas.
+- Calcular saldo de pontos e sets.
+- Chamar a procedure `AtualizarClassificacaoGeral` para atualizar o somatório do campus.
+
+Adicionalmente, a procedure `InicializarClassificacaoModalidade` é utilizada para preparar os times de uma nova modalidade na tabela de classificação.
 
 ---
 
 ## 🚧 Status do Projeto
 
-🟨 **Em desenvolvimento** – Modelagem concluída, lógicas sendo implementadas.
+🟨 **Em desenvolvimento** – Modelagem concluída, backend e lógicas em andamento.
 
 ---
 
 ## 👥 Equipe
 
-Projeto desenvolvido pelos alunos de **Análise e Desenvolvimento de Sistemas - IFPA 2024**, sob orientação de professores do curso.
+Projeto desenvolvido pelos alunos de **TADS - IFPA 2024 (G0791NC)**, sob orientação de professores Sebastião.
+
+- Richarlison Lisboa
+- Antonio Lucas
+- David Matheus
+- Gustavo Santos
+- Amanda Anjos
+- Keilane Soares
