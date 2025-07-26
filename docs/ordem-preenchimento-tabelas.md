@@ -2,7 +2,7 @@
 
 Para implementar o sistema corretamente, é essencial seguir uma **sequência lógica de cadastros**, garantindo que os dados sejam inseridos na ordem certa, sem violar restrições de chave estrangeira. Abaixo está o passo a passo **real** que os usuários seguirão ao utilizar o sistema após sua implementação:
 
----
+
 
 ## 📌 **1. Cadastro Inicial (Administrador do Campus Sede)**
 
@@ -31,7 +31,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      ('Vôlei Feminino', 3, 3, 2),
      ('Basquete Misto', 2, NULL, NULL);
      ```
-
+     
 3. **`Local`** (opcional, se houver locais específicos)  
    - Cadastrar ginásios, campos e espaços de competição.  
    - Exemplo:  
@@ -42,7 +42,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      ('Campo de Futebol', 1);
      ```
 
----
+
 
 ## 📌 **2. Cadastro de Usuários (Campus Sede)**
 
@@ -60,7 +60,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      ('Maria Souza', 'maria.souza@ifpa.edu.br', 'senha456', 3, TRUE);
      ```
 
----
+
 
 ## 📌 **3. Cadastro de Times (Campus Visitante)**
 
@@ -87,7 +87,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      ('Ana Santos', '20230002', 'Engenharia', 1);
      ```
 
----
+
 
 ## 📌 **4. Agendamento de Partidas (Campus Sede)**
 
@@ -104,7 +104,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      (1, 1, 2, '2025-10-15 14:00:00', 2, 'Fase de Grupos');
      ```
 
----
+
 
 ## 📌 **5. Lançamento de Resultados (Campus Sede)**
 
@@ -125,7 +125,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      - `ClassificacaoModalidade` (tabela por modalidade).  
      - `ClassificacaoGeral` (ranking geral dos campi).  
 
----
+
 
 ## 📌 **6. Publicação de Notícias (Opcional)**
 
@@ -141,7 +141,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
      ('Final de Futebol emocionante!', 'O time de Belém venceu por 2x1...', 1);
      ```
 
----
+
 
 ## 🔄 **Fluxo Contínuo de Uso**
 
@@ -157,7 +157,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
 3. **Público geral:**  
    - **Apenas visualiza** resultados, classificações e notícias.  
 
----
+
 
 ## 📊 **Resumo da Ordem de Operações**
 
@@ -172,7 +172,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
 | 7  | Inserir resultados             | Campus Sede          | `Resultado` (dispara atualizações)  |
 | 8  | Publicar notícias (opcional)   | Campus Sede          | `Noticia`                           |
 
----
+
 
 ### **Observações Importantes:**
 
