@@ -1,6 +1,6 @@
 -- EDICÇÃO DOS JOGOS 2025 (6 dias de jogos - abertura mais 5 dias de jogos)
 INSERT INTO Edicao (nome_edicao, ano, data_inicio, data_fim)
-VALUES ('Jogos IFPA 2025', 2025, '2025-06-01', '2025-06-06');
+VALUES ('Jogos IFPA 2026', 2026, '2026-06-01', '2026-06-06');
 
 -- INSERIR TODOS OS 18 CAMPUS
 INSERT INTO Campus (nome_campus, is_sede) VALUES
@@ -24,7 +24,13 @@ INSERT INTO Campus (nome_campus, is_sede) VALUES
 ('Vigia', FALSE);
 
 -- ALTERANDO A SEDE PARA SANTARÉM
-CALL trocar_sede('Santarém');
+CALL trocar_sede('Paragominas');
+
+-- INSERIR LOCAIS
+INSERT INTO Local (nome_local, descricao, id_campus) VALUES
+('Ginásio Paragominas - LADO A', 'Mesa oficial disponibilizada no Lado A da quadra do campus.', 14),
+('Ginásio Paragominas - LADO B', 'Mesa oficial disponibilizada no Lado B da quadra do campus.', 14);
+
 
 -- INSERIR MODALIDADES
 INSERT INTO Modalidade (nome_modalidade, descricao, duracao_minutos, pontos_vitoria, pontos_empate) VALUES
@@ -254,3 +260,67 @@ INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
 -- Campus Vigia - Tênis de Mesa Feminino (id_time = 32)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
 ('Juliana Ribeiro', 'TF1802301', 'Educação Física', 32);
+
+-- Cadastro de Partidas para Tênis de Mesa nos Jogos IFPA 2026
+-- Considerando:
+-- - Duração de 1h por partida
+-- - Primeira partida em 02/06/2026 às 8h
+-- - 4 partidas pela manhã e 4 pela tarde
+-- - Período de 02/06 a 05/06 (4 dias de jogos)
+-- - Status inicial "sem_time_atribuido"
+
+-- Partidas do dia 02/06/2026 (Manhã)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-02 08:00:00', 60, 'sem_time_atribuido', 1, 6, 1),  -- Ginásio Lado A
+('2026-06-02 08:00:00', 60, 'sem_time_atribuido', 2, 6, 1),  -- Ginásio Lado B
+('2026-06-02 09:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-02 09:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 02/06/2026 (Tarde)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-02 14:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-02 14:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-02 15:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-02 15:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 03/06/2026 (Manhã)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-03 08:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-03 08:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-03 09:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-03 09:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 03/06/2026 (Tarde)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-03 14:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-03 14:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-03 15:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-03 15:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 04/06/2026 (Manhã)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-04 08:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-04 08:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-04 09:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-04 09:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 04/06/2026 (Tarde)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-04 14:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-04 14:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-04 15:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-04 15:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 05/06/2026 (Manhã)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-05 08:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-05 08:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-05 09:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-05 09:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Partidas do dia 05/06/2026 (Tarde)
+INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+('2026-06-05 14:00:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-05 14:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
+('2026-06-05 15:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
+('2026-06-05 15:15:00', 60, 'sem_time_atribuido', 2, 6, 1);

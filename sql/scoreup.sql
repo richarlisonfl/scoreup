@@ -80,7 +80,7 @@ CREATE TABLE Partida (
     data_hora DATETIME NOT NULL,
     id_local INT NULL,
     fase VARCHAR(50) NOT NULL,
-    status ENUM('agendada', 'em_andamento', 'concluida', 'cancelada') DEFAULT 'agendada',
+    status ENUM('sem_time_atribuida','agendada', 'em_andamento', 'concluida', 'cancelada') DEFAULT 'sem_time_atribuida',
     FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
     FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
     FOREIGN KEY (id_time_a) REFERENCES Time(id_time),

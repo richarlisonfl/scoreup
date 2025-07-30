@@ -68,16 +68,7 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
    - Exemplo:
      ```sql
       INSERT INTO Local (nome_local, descricao, id_campus) VALUES
-      ('Ginásio Abaetetuba', 'Ginásio para práticas esportivas indoor.', 14),
-      ('Campo Altamira', 'Campo oficial para partidas de futebol.', 14),
-      ('Quadra Ananindeua', 'Quadra coberta para jogos de vôlei e basquete.', 14),
-      ('Estádio Belém', 'Estádio para jogos de futebol de grande porte.', 14),
-      ('Ginásio Bragança', 'Ginásio para eventos esportivos e culturais.', 14),
-      ('Campo Breves', 'Campo para treinos e jogos oficiais.', 14),
-      ('Quadra Cametá', 'Local para jogos de handebol e vôlei.', 14),
-      ('Ginásio Castanhal', 'Espaço para treinos e competições esportivas.', 14),
-      ('Campo Conceição', 'Campo oficial para competições.', 14),
-      ('Ginásio Itaituba', 'Ginásio para eventos esportivos.', 14);
+      ('Ginásio Paragominas', 'Ginásio para práticas esportivas indoor.', 14),
      ```
 
 ---
