@@ -97,3 +97,6 @@ Projeto desenvolvido pelos alunos de **TADS - IFPA 2024 (G0791NC)**, sob orienta
 - Gustavo Santos
 - Amanda Anjos
 - Keilane Soares
+
+> ⚠️ **Observação importante:**  
+> O sistema permite apenas um usuário administrador por vez, garantido por uma trigger no banco de dados. Todos os usuários cadastrados inicialmente possuem perfil de responsável, podendo gerenciar dados do seu campus.
