@@ -59,228 +59,198 @@ INSERT INTO Usuario (nome_completo, email, senha, id_campus, is_admin, is_respon
 ('Tucurui', 'usuario.tucurui@ifpa.edu.br', 'senha123', 17, FALSE, TRUE),
 ('Vigia', 'usuario.vigia@ifpa.edu.br', 'senha123', 18, FALSE, TRUE);
 
--- TIMES ALTERADOS PARA TÊNIS DE MESA (id_modalidade = 6)
+-- TIMES ALTERADOS PARA TÊNIS DE MESA (id_modalidade = 6) - REMOVIDOS ABAETETUBA E ÓBIDOS
 INSERT INTO Time (nome_time, id_edicao, id_campus, id_modalidade, sexo) VALUES
--- Campus 1 (Abaetetuba)
--- ('Abaetetuba Tênis de Mesa Masculino', 1, 1, 6, 'M'),
--- ('Abaetetuba Tênis de Mesa Feminino', 1, 1, 6, 'F'),
-
 -- Campus 2 (Altamira)
-('Altamira Tênis de Mesa Masculino', 1, 2, 6, 'M'),
-('Altamira Tênis de Mesa Feminino', 1, 2, 6, 'F'),
+('Altamira Tênis de Mesa Masculino', 1, 2, 6, 'M'),  -- id_time = 1
+('Altamira Tênis de Mesa Feminino', 1, 2, 6, 'F'),   -- id_time = 2
 
 -- Campus 3 (Ananindeua)
- ('Ananindeua Tênis de Mesa Masculino', 1, 3, 6, 'M'),
- ('Ananindeua Tênis de Mesa Feminino', 1, 3, 6, 'F'),
+('Ananindeua Tênis de Mesa Masculino', 1, 3, 6, 'M'), -- id_time = 3
+('Ananindeua Tênis de Mesa Feminino', 1, 3, 6, 'F'),  -- id_time = 4
 
 -- Campus 4 (Belém)
-('Belém Tênis de Mesa Masculino', 1, 4, 6, 'M'),
-('Belém Tênis de Mesa Feminino', 1, 4, 6, 'F'),
+('Belém Tênis de Mesa Masculino', 1, 4, 6, 'M'),      -- id_time = 5
+('Belém Tênis de Mesa Feminino', 1, 4, 6, 'F'),       -- id_time = 6
 
 -- Campus 5 (Bragança)
-('Bragança Tênis de Mesa Masculino', 1, 5, 6, 'M'),
-('Bragança Tênis de Mesa Feminino', 1, 5, 6, 'F'),
+('Bragança Tênis de Mesa Masculino', 1, 5, 6, 'M'),   -- id_time = 7
+('Bragança Tênis de Mesa Feminino', 1, 5, 6, 'F'),    -- id_time = 8
 
 -- Campus 6 (Breves)
-('Breves Tênis de Mesa Masculino', 1, 6, 6, 'M'),
-('Breves Tênis de Mesa Feminino', 1, 6, 6, 'F'),
+('Breves Tênis de Mesa Masculino', 1, 6, 6, 'M'),     -- id_time = 9
+('Breves Tênis de Mesa Feminino', 1, 6, 6, 'F'),      -- id_time = 10
 
 -- Campus 7 (Cametá)
-('Cametá Tênis de Mesa Masculino', 1, 7, 6, 'M'),
-('Cametá Tênis de Mesa Feminino', 1, 7, 6, 'F'),
+('Cametá Tênis de Mesa Masculino', 1, 7, 6, 'M'),     -- id_time = 11
+('Cametá Tênis de Mesa Feminino', 1, 7, 6, 'F'),      -- id_time = 12
 
 -- Campus 8 (Castanhal)
-('Castanhal Tênis de Mesa Masculino', 1, 8, 6, 'M'),
-('Castanhal Tênis de Mesa Feminino', 1, 8, 6, 'F'),
+('Castanhal Tênis de Mesa Masculino', 1, 8, 6, 'M'),  -- id_time = 13
+('Castanhal Tênis de Mesa Feminino', 1, 8, 6, 'F'),   -- id_time = 14
 
 -- Campus 9 (Conceição do Araguaia)
-('Conceição do Araguaia Tênis de Mesa Masculino', 1, 9, 6, 'M'),
-('Conceição do Araguaia Tênis de Mesa Feminino', 1, 9, 6, 'F'),
+('Conceição do Araguaia Tênis de Mesa Masculino', 1, 9, 6, 'M'), -- id_time = 15
+('Conceição do Araguaia Tênis de Mesa Feminino', 1, 9, 6, 'F'),  -- id_time = 16
 
 -- Campus 10 (Itaituba)
-('Itaituba Tênis de Mesa Masculino', 1, 10, 6, 'M'),
-('Itaituba Tênis de Mesa Feminino', 1, 10, 6, 'F'),
+('Itaituba Tênis de Mesa Masculino', 1, 10, 6, 'M'),  -- id_time = 17
+('Itaituba Tênis de Mesa Feminino', 1, 10, 6, 'F'),   -- id_time = 18
 
 -- Campus 11 (Marabá Industrial)
-('Marabá Industrial Tênis de Mesa Masculino', 1, 11, 6, 'M'),
-('Marabá Industrial Tênis de Mesa Feminino', 1, 11, 6, 'F'),
+('Marabá Industrial Tênis de Mesa Masculino', 1, 11, 6, 'M'), -- id_time = 19
+('Marabá Industrial Tênis de Mesa Feminino', 1, 11, 6, 'F'),  -- id_time = 20
 
 -- Campus 12 (Marabá Rural)
-('Marabá Rural Tênis de Mesa Masculino', 1, 12, 6, 'M'),
-('Marabá Rural Tênis de Mesa Feminino', 1, 12, 6, 'F'),
-
--- Campus 13 (Óbidos)
--- ('Óbidos Tênis de Mesa Masculino', 1, 13, 6, 'M'),
--- ('Óbidos Tênis de Mesa Feminino', 1, 13, 6, 'F'),
+('Marabá Rural Tênis de Mesa Masculino', 1, 12, 6, 'M'), -- id_time = 21
+('Marabá Rural Tênis de Mesa Feminino', 1, 12, 6, 'F'),  -- id_time = 22
 
 -- Campus 14 (Paragominas)
-('Paragominas Tênis de Mesa Masculino', 1, 14, 6, 'M'),
-('Paragominas Tênis de Mesa Feminino', 1, 14, 6, 'F'),
+('Paragominas Tênis de Mesa Masculino', 1, 14, 6, 'M'), -- id_time = 23
+('Paragominas Tênis de Mesa Feminino', 1, 14, 6, 'F'),  -- id_time = 24
 
 -- Campus 15 (Parauapebas)
-('Parauapebas Tênis de Mesa Masculino', 1, 15, 6, 'M'),
-('Parauapebas Tênis de Mesa Feminino', 1, 15, 6, 'F'),
+('Parauapebas Tênis de Mesa Masculino', 1, 15, 6, 'M'), -- id_time = 25
+('Parauapebas Tênis de Mesa Feminino', 1, 15, 6, 'F'),  -- id_time = 26
 
 -- Campus 16 (Santarém)
-('Santarém Tênis de Mesa Masculino', 1, 16, 6, 'M'),
-('Santarém Tênis de Mesa Feminino', 1, 16, 6, 'F'),
+('Santarém Tênis de Mesa Masculino', 1, 16, 6, 'M'),    -- id_time = 27
+('Santarém Tênis de Mesa Feminino', 1, 16, 6, 'F'),     -- id_time = 28
 
 -- Campus 17 (Tucuruí)
-('Tucuruí Tênis de Mesa Masculino', 1, 17, 6, 'M'),
-('Tucuruí Tênis de Mesa Feminino', 1, 17, 6, 'F'),
+('Tucuruí Tênis de Mesa Masculino', 1, 17, 6, 'M'),     -- id_time = 29
+('Tucuruí Tênis de Mesa Feminino', 1, 17, 6, 'F'),      -- id_time = 30
 
 -- Campus 18 (Vigia)
-('Vigia Tênis de Mesa Masculino', 1, 18, 6, 'M'),
-('Vigia Tênis de Mesa Feminino', 1, 18, 6, 'F');
+('Vigia Tênis de Mesa Masculino', 1, 18, 6, 'M'),       -- id_time = 31
+('Vigia Tênis de Mesa Feminino', 1, 18, 6, 'F');        -- id_time = 32
 
+-- Inserção de atletas (REMOVIDOS ABAETETUBA E ÓBIDOS)
 
--- Inserção de atletas
-
--- Inserção de atletas (apenas 1 masculino e 1 feminino por campus)
-
--- Campus Abaetetuba - Tênis de Mesa Masculino (id_time = 1)
+-- Campus Altamira - Tênis de Mesa Masculino (id_time = 1)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Lucas Silva', 'TM0102301', 'Educação Física', 1);
+('Bruno Gomes', 'TM0202301', 'Educação Física', 1);
 
--- Campus Abaetetuba - Tênis de Mesa Feminino (id_time = 2)
+-- Campus Altamira - Tênis de Mesa Feminino (id_time = 2)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Mariana Souza', 'TF0102301', 'Educação Física', 2);
+('Larissa Melo', 'TF0202301', 'Educação Física', 2);
 
--- Campus Altamira - Tênis de Mesa Masculino (id_time = 3)
+-- Campus Ananindeua - Tênis de Mesa Masculino (id_time = 3)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Bruno Gomes', 'TM0202301', 'Educação Física', 3);
+('Victor Santos', 'TM0302301', 'Educação Física', 3);
 
--- Campus Altamira - Tênis de Mesa Feminino (id_time = 4)
+-- Campus Ananindeua - Tênis de Mesa Feminino (id_time = 4)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Larissa Melo', 'TF0202301', 'Educação Física', 4);
+('Natália Ribeiro', 'TF0302301', 'Educação Física', 4);
 
--- Campus Ananindeua - Tênis de Mesa Masculino (id_time = 5)
+-- Campus Belém - Tênis de Mesa Masculino (id_time = 5)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Victor Santos', 'TM0302301', 'Educação Física', 5);
+('Leandro Silva', 'TM0402301', 'Educação Física', 5);
 
--- Campus Ananindeua - Tênis de Mesa Feminino (id_time = 6)
+-- Campus Belém - Tênis de Mesa Feminino (id_time = 6)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Natália Ribeiro', 'TF0302301', 'Educação Física', 6);
+('Daniela Souza', 'TF0402301', 'Educação Física', 6);
 
--- Campus Belém - Tênis de Mesa Masculino (id_time = 7)
+-- Campus Bragança - Tênis de Mesa Masculino (id_time = 7)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Leandro Silva', 'TM0402301', 'Educação Física', 7);
+('Igor Gomes', 'TM0502301', 'Educação Física', 7);
 
--- Campus Belém - Tênis de Mesa Feminino (id_time = 8)
+-- Campus Bragança - Tênis de Mesa Feminino (id_time = 8)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Daniela Souza', 'TF0402301', 'Educação Física', 8);
+('Juliana Melo', 'TF0502301', 'Educação Física', 8);
 
--- Campus Bragança - Tênis de Mesa Masculino (id_time = 9)
+-- Campus Breves - Tênis de Mesa Masculino (id_time = 9)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Igor Gomes', 'TM0502301', 'Educação Física', 9);
+('Marcos Santos', 'TM0602301', 'Educação Física', 9);
 
--- Campus Bragança - Tênis de Mesa Feminino (id_time = 10)
+-- Campus Breves - Tênis de Mesa Feminino (id_time = 10)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Juliana Melo', 'TF0502301', 'Educação Física', 10);
+('Renata Ribeiro', 'TF0602301', 'Educação Física', 10);
 
--- Campus Breves - Tênis de Mesa Masculino (id_time = 11)
+-- Campus Cametá - Tênis de Mesa Masculino (id_time = 11)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Marcos Santos', 'TM0602301', 'Educação Física', 11);
+('José Silva', 'TM0702301', 'Educação Física', 11);
 
--- Campus Breves - Tênis de Mesa Feminino (id_time = 12)
+-- Campus Cametá - Tênis de Mesa Feminino (id_time = 12)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Renata Ribeiro', 'TF0602301', 'Educação Física', 12);
+('Ana Souza', 'TF0702301', 'Educação Física', 12);
 
--- Campus Cametá - Tênis de Mesa Masculino (id_time = 13)
+-- Campus Castanhal - Tênis de Mesa Masculino (id_time = 13)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('José Silva', 'TM0702301', 'Educação Física', 13);
+('Rafael Gomes', 'TM0802301', 'Educação Física', 13);
 
--- Campus Cametá - Tênis de Mesa Feminino (id_time = 14)
+-- Campus Castanhal - Tênis de Mesa Feminino (id_time = 14)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Ana Souza', 'TF0702301', 'Educação Física', 14);
+('Juliana Ribeiro', 'TF0802301', 'Educação Física', 14);
 
--- Campus Castanhal - Tênis de Mesa Masculino (id_time = 15)
+-- Campus Conceição do Araguaia - Tênis de Mesa Masculino (id_time = 15)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Rafael Gomes', 'TM0802301', 'Educação Física', 15);
+('Eduardo Silva', 'TM0902301', 'Educação Física', 15);
 
--- Campus Castanhal - Tênis de Mesa Feminino (id_time = 16)
+-- Campus Conceição do Araguaia - Tênis de Mesa Feminino (id_time = 16)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Juliana Ribeiro', 'TF0802301', 'Educação Física', 16);
+('Vanessa Souza', 'TF0902301', 'Educação Física', 16);
 
--- Campus Conceição do Araguaia - Tênis de Mesa Masculino (id_time = 17)
+-- Campus Itaituba - Tênis de Mesa Masculino (id_time = 17)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Eduardo Silva', 'TM0902301', 'Educação Física', 17);
+('Rodrigo Santos', 'TM1002301', 'Educação Física', 17);
 
--- Campus Conceição do Araguaia - Tênis de Mesa Feminino (id_time = 18)
+-- Campus Itaituba - Tênis de Mesa Feminino (id_time = 18)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Vanessa Souza', 'TF0902301', 'Educação Física', 18);
+('Juliana Ribeiro', 'TF1002301', 'Educação Física', 18);
 
--- Campus Itaituba - Tênis de Mesa Masculino (id_time = 19)
+-- Campus Marabá Industrial - Tênis de Mesa Masculino (id_time = 19)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Rodrigo Santos', 'TM1002301', 'Educação Física', 19);
+('Thiago Silva', 'TM1102301', 'Educação Física', 19);
 
--- Campus Itaituba - Tênis de Mesa Feminino (id_time = 20)
+-- Campus Marabá Industrial - Tênis de Mesa Feminino (id_time = 20)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Juliana Ribeiro', 'TF1002301', 'Educação Física', 20);
+('Mariana Souza', 'TF1102301', 'Educação Física', 20);
 
--- Campus Marabá Industrial - Tênis de Mesa Masculino (id_time = 21)
+-- Campus Marabá Rural - Tênis de Mesa Masculino (id_time = 21)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Thiago Silva', 'TM1102301', 'Educação Física', 21);
+('Matheus Gomes', 'TM1202301', 'Educação Física', 21);
 
--- Campus Marabá Industrial - Tênis de Mesa Feminino (id_time = 22)
+-- Campus Marabá Rural - Tênis de Mesa Feminino (id_time = 22)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Mariana Souza', 'TF1102301', 'Educação Física', 22);
+('Larissa Melo', 'TF1202301', 'Educação Física', 22);
 
--- Campus Marabá Rural - Tênis de Mesa Masculino (id_time = 23)
+-- Campus Paragominas - Tênis de Mesa Masculino (id_time = 23)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Matheus Gomes', 'TM1202301', 'Educação Física', 23);
+('Leandro Silva', 'TM1402301', 'Educação Física', 23);
 
--- Campus Marabá Rural - Tênis de Mesa Feminino (id_time = 24)
+-- Campus Paragominas - Tênis de Mesa Feminino (id_time = 24)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Larissa Melo', 'TF1202301', 'Educação Física', 24);
+('Daniela Souza', 'TF1402301', 'Educação Física', 24);
 
--- Campus Óbidos - Tênis de Mesa Masculino (id_time = 25)
+-- Campus Parauapebas - Tênis de Mesa Masculino (id_time = 25)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Victor Santos', 'TM1302301', 'Educação Física', 25);
+('Igor Gomes', 'TM1502301', 'Educação Física', 25);
 
--- Campus Óbidos - Tênis de Mesa Feminino (id_time = 26)
+-- Campus Parauapebas - Tênis de Mesa Feminino (id_time = 26)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Natália Ribeiro', 'TF1302301', 'Educação Física', 26);
+('Juliana Melo', 'TF1502301', 'Educação Física', 26);
 
--- Campus Paragominas - Tênis de Mesa Masculino (id_time = 27)
+-- Campus Santarém - Tênis de Mesa Masculino (id_time = 27)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Leandro Silva', 'TM1402301', 'Educação Física', 27);
+('Marcos Santos', 'TM1602301', 'Educação Física', 27);
 
--- Campus Paragominas - Tênis de Mesa Feminino (id_time = 28)
+-- Campus Santarém - Tênis de Mesa Feminino (id_time = 28)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Daniela Souza', 'TF1402301', 'Educação Física', 28);
+('Renata Ribeiro', 'TF1602301', 'Educação Física', 28);
 
--- Campus Parauapebas - Tênis de Mesa Masculino (id_time = 29)
+-- Campus Tucuruí - Tênis de Mesa Masculino (id_time = 29)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Igor Gomes', 'TM1502301', 'Educação Física', 29);
+('José Silva', 'TM1702301', 'Educação Física', 29);
 
--- Campus Parauapebas - Tênis de Mesa Feminino (id_time = 30)
+-- Campus Tucuruí - Tênis de Mesa Feminino (id_time = 30)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Juliana Melo', 'TF1502301', 'Educação Física', 30);
+('Ana Souza', 'TF1702301', 'Educação Física', 30);
 
--- Campus Santarém - Tênis de Mesa Masculino (id_time = 31)
+-- Campus Vigia - Tênis de Mesa Masculino (id_time = 31)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Marcos Santos', 'TM1602301', 'Educação Física', 31);
+('Rafael Gomes', 'TM1802301', 'Educação Física', 31);
 
--- Campus Santarém - Tênis de Mesa Feminino (id_time = 32)
+-- Campus Vigia - Tênis de Mesa Feminino (id_time = 32)
 INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Renata Ribeiro', 'TF1602301', 'Educação Física', 32);
-
--- Campus Tucuruí - Tênis de Mesa Masculino (id_time = 33)
-INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('José Silva', 'TM1702301', 'Educação Física', 33);
-
--- Campus Tucuruí - Tênis de Mesa Feminino (id_time = 34)
-INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Ana Souza', 'TF1702301', 'Educação Física', 34);
-
--- Campus Vigia - Tênis de Mesa Masculino (id_time = 35)
-INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Rafael Gomes', 'TM1802301', 'Educação Física', 35);
-
--- Campus Vigia - Tênis de Mesa Feminino (id_time = 36)
-INSERT INTO Atleta (nome_atleta, matricula, curso, id_time) VALUES
-('Juliana Ribeiro', 'TF1802301', 'Educação Física', 36);
-
-
-
+('Juliana Ribeiro', 'TF1802301', 'Educação Física', 32);
