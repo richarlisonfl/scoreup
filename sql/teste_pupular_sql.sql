@@ -58,3 +58,6 @@ INSERT INTO Usuario (nome_completo, email, senha, id_campus, is_admin, is_respon
 ('Santarem', 'usuario.santarem@ifpa.edu.br', 'senha123', 16, FALSE, TRUE),
 ('Tucurui', 'usuario.tucurui@ifpa.edu.br', 'senha123', 17, FALSE, TRUE),
 ('Vigia', 'usuario.vigia@ifpa.edu.br', 'senha123', 18, FALSE, TRUE);
+
+
+

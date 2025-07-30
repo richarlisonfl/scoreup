@@ -66,7 +66,7 @@ CREATE TABLE Local (
     id_local INT PRIMARY KEY AUTO_INCREMENT,
     nome_local VARCHAR(100) NOT NULL,
     descricao TEXT,
-    capacidade INT,
+    -- capacidade INT,
     id_campus INT NOT NULL,
     FOREIGN KEY (id_campus) REFERENCES Campus(id_campus)
 );

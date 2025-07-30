@@ -22,12 +22,25 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
    - Cadastrar todos os campi participantes, indicando qual é sede.
    - Exemplo:
      ```sql
-     INSERT INTO Campus (nome_campus, is_sede) VALUES
-     ('Abaetetuba', FALSE),
-     ('Belém', TRUE),
-     ('Santarém', FALSE),
-     ...;
-     ```
+      INSERT INTO Campus (nome_campus, is_sede) VALUES
+      ('Abaetetuba', FALSE),
+      ('Altamira', FALSE),
+      ('Ananindeua', FALSE),
+      ('Belém', TRUE),		-- por padrão belem é sede ao iniciar
+      ('Bragança', FALSE),
+      ('Breves', FALSE),
+      ('Cametá', FALSE),
+      ('Castanhal', FALSE),
+      ('Conceição do Araguaia', FALSE),
+      ('Itaituba', FALSE),
+      ('Marabá Industrial', FALSE),
+      ('Marabá Rural', FALSE),
+      ('Óbidos', FALSE),
+      ('Paragominas', FALSE),
+      ('Parauapebas', FALSE),
+      ('Santarém', FALSE),
+      ('Tucuruí', FALSE),
+      ('Vigia', FALSE);
    - Para alterar o campus sede:
      ```sql
      CALL trocar_sede('Santarém');
@@ -37,19 +50,34 @@ Para implementar o sistema corretamente, é essencial seguir uma **sequência l�
    - Definir todas as modalidades esportivas disponíveis nos JIFs.
    - Exemplo:
      ```sql
-     INSERT INTO Modalidade (nome_modalidade, descricao, duracao_minutos, pontos_vitoria, pontos_empate) VALUES
-     ('Futsal', 'Futsal masculino e feminino', 40, 3, 1),
-     ('Voleibol', 'Voleibol de quadra', 60, 3, 1),
-     ...;
+      INSERT INTO Modalidade (nome_modalidade, descricao, duracao_minutos, pontos_vitoria, pontos_empate) VALUES
+      ('Futsal', 'Futsal masculino e feminino', 40, 3, 1),
+      ('Voleibol', 'Voleibol de quadra', 60, 3, 1),
+      ('Basquete', 'Basquete tradicional', 40, 3, 1),
+      ('Handebol', 'Handebol de quadra', 60, 3, 1),
+      ('Atletismo', 'Provas de pista e campo', 0, 3, 1),
+      ('Tênis de Mesa', 'Individual e duplas', 30, 3, 1),
+      ('Xadrez', 'Competição individual', 60, 3, 1),
+      ('Judô', 'Lutas individuais', 10, 3, 1),
+      ('Natação', 'Provas individuais e revezamento', 0, 3, 1),
+      ('Vôlei de Praia', 'Duplas masculinas e femininas', 30, 3, 1);
      ```
 
 4. **`Local`**  
    - Cadastrar ginásios, campos e espaços de competição, vinculando ao campus.
    - Exemplo:
      ```sql
-     INSERT INTO Local (nome_local, descricao, capacidade, id_campus) VALUES
-     ('Ginásio Poliesportivo', 'Quadra principal', 1000, 4),
-     ('Campo de Futebol', 'Gramado oficial', 500, 4);
+      INSERT INTO Local (nome_local, descricao, id_campus) VALUES
+      ('Ginásio Abaetetuba', 'Ginásio para práticas esportivas indoor.', 14),
+      ('Campo Altamira', 'Campo oficial para partidas de futebol.', 14),
+      ('Quadra Ananindeua', 'Quadra coberta para jogos de vôlei e basquete.', 14),
+      ('Estádio Belém', 'Estádio para jogos de futebol de grande porte.', 14),
+      ('Ginásio Bragança', 'Ginásio para eventos esportivos e culturais.', 14),
+      ('Campo Breves', 'Campo para treinos e jogos oficiais.', 14),
+      ('Quadra Cametá', 'Local para jogos de handebol e vôlei.', 14),
+      ('Ginásio Castanhal', 'Espaço para treinos e competições esportivas.', 14),
+      ('Campo Conceição', 'Campo oficial para competições.', 14),
+      ('Ginásio Itaituba', 'Ginásio para eventos esportivos.', 14);
      ```
 
 ---
