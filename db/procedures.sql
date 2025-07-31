@@ -419,7 +419,7 @@ BEGIN
     
     COMMIT;
 END //
-CREATE PROCEDURE sp_inserir_local(
+CREATE PROCEDURE sp_adicionar_local(
     IN p_nome_local VARCHAR(100),
     IN p_descricao TEXT,
     IN p_id_campus INT
@@ -436,6 +436,101 @@ BEGIN
     VALUES (p_nome_local, p_descricao, p_id_campus);
     
     -- Retornar o ID do local inserido
-    SELECT LAST_INSERT_ID() AS id_local;
+    -- SELECT LAST_INSERT_ID() AS id_local;
+END //
+CREATE PROCEDURE sp_adicionar_modalidade(
+    IN p_nome_modalidade VARCHAR(50),
+    IN p_descricao TEXT,
+    IN p_duracao_minutos INT,
+    IN p_pontos_vitoria INT,
+    IN p_pontos_empate INT
+)
+BEGIN
+    -- Verificar se a modalidade já existe
+    IF EXISTS (SELECT 1 FROM Modalidade WHERE nome_modalidade = p_nome_modalidade) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Modalidade já cadastrada';
+    END IF;
+    
+    -- Validação dos parâmetros
+    IF p_duracao_minutos <= 0 THEN
+        SET p_duracao_minutos = 60; -- Valor padrão
+    END IF;
+    
+    IF p_pontos_vitoria <= 0 THEN
+        SET p_pontos_vitoria = 3; -- Valor padrão
+    END IF;
+    
+    IF p_pontos_empate < 0 THEN
+        SET p_pontos_empate = 1; -- Valor padrão
+    END IF;
+    
+    -- Inserir a modalidade
+    INSERT INTO Modalidade (
+        nome_modalidade, 
+        descricao, 
+        duracao_minutos, 
+        pontos_vitoria, 
+        pontos_empate
+    ) VALUES (
+        p_nome_modalidade, 
+        p_descricao, 
+        p_duracao_minutos, 
+        p_pontos_vitoria, 
+        p_pontos_empate
+    );
+    
+    -- Retornar o ID da modalidade inserida
+    -- SELECT LAST_INSERT_ID() AS id_modalidade;
+END //
+
+CREATE PROCEDURE sp_adicionar_usuario(
+    IN p_nome_completo VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_senha_aberta VARCHAR(255),
+    IN p_id_campus INT,
+    IN p_is_admin BOOLEAN,
+    IN p_is_responsavel BOOLEAN
+)
+BEGIN
+    DECLARE v_senha_hash VARCHAR(255);
+    DECLARE v_email_existe INT;
+    
+    -- Criar hash da senha (usando SHA2 como exemplo)
+    SET v_senha_hash = SHA2(p_senha_aberta, 256);
+    
+    -- Verificar se o email já está cadastrado
+    SELECT COUNT(*) INTO v_email_existe FROM Usuario WHERE email = p_email;
+    
+    IF v_email_existe > 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Erro: Email já cadastrado no sistema';
+    END IF;
+    
+    -- Verificar se o campus existe
+    IF NOT EXISTS (SELECT 1 FROM Campus WHERE id_campus = p_id_campus) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Erro: Campus não encontrado';
+    END IF;
+    
+    -- Inserir o novo usuário
+    INSERT INTO Usuario (
+        nome_completo, 
+        email, 
+        senha, 
+        id_campus, 
+        is_admin, 
+        is_responsavel
+    ) VALUES (
+        p_nome_completo,
+        p_email,
+        v_senha_hash,
+        p_id_campus,
+        IFNULL(p_is_admin, FALSE),
+        IFNULL(p_is_responsavel, FALSE)
+    );
+    
+    -- Retornar o ID do usuário inserido
+    --  SELECT LAST_INSERT_ID() AS id_usuario;
 END //
 DELIMITER ;
