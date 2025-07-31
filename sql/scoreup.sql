@@ -70,16 +70,17 @@ CREATE TABLE Local (
     id_campus INT NOT NULL,
     FOREIGN KEY (id_campus) REFERENCES Campus(id_campus)
 );
-
+-- INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
 CREATE TABLE Partida (
-    id_partida INT PRIMARY KEY AUTO_INCREMENT,
-    id_edicao INT NOT NULL,
-    id_modalidade INT NOT NULL,
-    id_time_a INT NOT NULL,
-    id_time_b INT NOT NULL,
+    id_partida INT PRIMARY KEY AUTO_INCREMENT, -- 1
+    id_edicao INT NOT NULL, -- 1
+    id_modalidade INT NOT NULL, -- 6
+    id_time_a INT NULL,  -- Alterado para permitir NULL
+    id_time_b INT NULL,  -- Alterado para permitir NULL
     data_hora DATETIME NOT NULL,
+    duracao_minutos INT NULL,  -- Adicionado
     id_local INT NULL,
-    fase VARCHAR(50) NOT NULL,
+    observacao VARCHAR(50) NULL,
     status ENUM('sem_time_atribuida','agendada', 'em_andamento', 'concluida', 'cancelada') DEFAULT 'sem_time_atribuida',
     FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
     FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
@@ -91,10 +92,10 @@ CREATE TABLE Partida (
 CREATE TABLE Resultado (
     id_resultado INT PRIMARY KEY AUTO_INCREMENT,
     id_partida INT NOT NULL,
-    placar_casa INT NOT NULL,
-    placar_visitante INT NOT NULL,
-    sets_casa INT,
-    sets_visitante INT,
+    placar_a INT NOT NULL,
+    placar_b INT NOT NULL,
+    sets_a INT,
+    sets_b INT,
     vencedor INT,
     observacoes TEXT,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -174,13 +175,13 @@ CREATE TRIGGER valida_genero_partida
 BEFORE INSERT ON Partida
 FOR EACH ROW
 BEGIN
-    DECLARE genero_casa CHAR(1);
-    DECLARE genero_visitante CHAR(1);
+    DECLARE genero_a CHAR(1);
+    DECLARE genero_b CHAR(1);
 
-    SELECT sexo INTO genero_casa FROM Time WHERE id_time = NEW.id_time_a;
-    SELECT sexo INTO genero_visitante FROM Time WHERE id_time = NEW.id_time_b;
+    SELECT sexo INTO genero_a FROM Time WHERE id_time = NEW.id_time_a;
+    SELECT sexo INTO genero_b FROM Time WHERE id_time = NEW.id_time_b;
 
-    IF genero_casa != genero_visitante THEN
+    IF genero_a != genero_b THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Times devem ser do mesmo gênero para uma partida';
     END IF;
 END //
@@ -218,24 +219,24 @@ BEGIN
         SET pontos = pontos + (SELECT pontos_empate FROM Modalidade WHERE id_modalidade = modalidade_id),
             jogos = jogos + 1,
             empates = empates + 1,
-            sets_pro = sets_pro + NEW.sets_casa,
-            sets_contra = sets_contra + NEW.sets_visitante,
-            pontos_pro = pontos_pro + NEW.placar_casa,
-            pontos_contra = pontos_contra + NEW.placar_visitante,
-            saldo_sets = (sets_pro + NEW.sets_casa) - (sets_contra + NEW.sets_visitante),
-            saldo_pontos = (pontos_pro + NEW.placar_casa) - (pontos_contra + NEW.placar_visitante)
+            sets_pro = sets_pro + NEW.sets_a,
+            sets_contra = sets_contra + NEW.sets_b,
+            pontos_pro = pontos_pro + NEW.placar_a,
+            pontos_contra = pontos_contra + NEW.placar_b,
+            saldo_sets = (sets_pro + NEW.sets_a) - (sets_contra + NEW.sets_b),
+            saldo_pontos = (pontos_pro + NEW.placar_a) - (pontos_contra + NEW.placar_b)
         WHERE id_edicao = edicao_id AND id_modalidade = modalidade_id AND id_time = time_vencedor_id;
 
         UPDATE ClassificacaoModalidade
         SET pontos = pontos + (SELECT pontos_empate FROM Modalidade WHERE id_modalidade = modalidade_id),
             jogos = jogos + 1,
             empates = empates + 1,
-            sets_pro = sets_pro + NEW.sets_visitante,
-            sets_contra = sets_contra + NEW.sets_casa,
-            pontos_pro = pontos_pro + NEW.placar_visitante,
-            pontos_contra = pontos_contra + NEW.placar_casa,
-            saldo_sets = (sets_pro + NEW.sets_visitante) - (sets_contra + NEW.sets_casa),
-            saldo_pontos = (pontos_pro + NEW.placar_visitante) - (pontos_contra + NEW.placar_casa)
+            sets_pro = sets_pro + NEW.sets_b,
+            sets_contra = sets_contra + NEW.sets_a,
+            pontos_pro = pontos_pro + NEW.placar_b,
+            pontos_contra = pontos_contra + NEW.placar_a,
+            saldo_sets = (sets_pro + NEW.sets_b) - (sets_contra + NEW.sets_a),
+            saldo_pontos = (pontos_pro + NEW.placar_b) - (pontos_contra + NEW.placar_a)
         WHERE id_edicao = edicao_id AND id_modalidade = modalidade_id AND id_time = time_perdedor_id;
 
     ELSE
@@ -243,27 +244,27 @@ BEGIN
         SET pontos = pontos + (SELECT pontos_vitoria FROM Modalidade WHERE id_modalidade = modalidade_id),
             jogos = jogos + 1,
             vitorias = vitorias + 1,
-            sets_pro = sets_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_casa, NEW.sets_visitante),
-            sets_contra = sets_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_visitante, NEW.sets_casa),
-            pontos_pro = pontos_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_casa, NEW.placar_visitante),
-            pontos_contra = pontos_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_visitante, NEW.placar_casa),
-            saldo_sets = (sets_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_casa, NEW.sets_visitante)) - 
-                          (sets_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_visitante, NEW.sets_casa)),
-            saldo_pontos = (pontos_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_casa, NEW.placar_visitante)) - 
-                           (pontos_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_visitante, NEW.placar_casa))
+            sets_pro = sets_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_a, NEW.sets_b),
+            sets_contra = sets_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_b, NEW.sets_a),
+            pontos_pro = pontos_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_a, NEW.placar_b),
+            pontos_contra = pontos_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_b, NEW.placar_a),
+            saldo_sets = (sets_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_a, NEW.sets_b)) - 
+                          (sets_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_b, NEW.sets_a)),
+            saldo_pontos = (pontos_pro + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_a, NEW.placar_b)) - 
+                           (pontos_contra + IF(time_vencedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_b, NEW.placar_a))
         WHERE id_edicao = edicao_id AND id_modalidade = modalidade_id AND id_time = time_vencedor_id;
 
         UPDATE ClassificacaoModalidade
         SET jogos = jogos + 1,
             derrotas = derrotas + 1,
-            sets_pro = sets_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_casa, NEW.sets_visitante),
-            sets_contra = sets_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_visitante, NEW.sets_casa),
-            pontos_pro = pontos_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_casa, NEW.placar_visitante),
-            pontos_contra = pontos_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_visitante, NEW.placar_casa),
-            saldo_sets = (sets_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_casa, NEW.sets_visitante)) - 
-                          (sets_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_visitante, NEW.sets_casa)),
-            saldo_pontos = (pontos_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_casa, NEW.placar_visitante)) - 
-                           (pontos_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_visitante, NEW.placar_casa))
+            sets_pro = sets_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_a, NEW.sets_b),
+            sets_contra = sets_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_b, NEW.sets_a),
+            pontos_pro = pontos_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_a, NEW.placar_b),
+            pontos_contra = pontos_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_b, NEW.placar_a),
+            saldo_sets = (sets_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_a, NEW.sets_b)) - 
+                          (sets_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.sets_b, NEW.sets_a)),
+            saldo_pontos = (pontos_pro + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_a, NEW.placar_b)) - 
+                           (pontos_contra + IF(time_perdedor_id = (SELECT id_time_a FROM Partida WHERE id_partida = NEW.id_partida), NEW.placar_b, NEW.placar_a))
         WHERE id_edicao = edicao_id AND id_modalidade = modalidade_id AND id_time = time_perdedor_id;
     END IF;
 

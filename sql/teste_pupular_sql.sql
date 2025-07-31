@@ -324,3 +324,27 @@ INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade
 ('2026-06-05 14:00:00', 60, 'sem_time_atribuido', 2, 6, 1),
 ('2026-06-05 15:15:00', 60, 'sem_time_atribuido', 1, 6, 1),
 ('2026-06-05 15:15:00', 60, 'sem_time_atribuido', 2, 6, 1);
+
+-- Atualizando as partidas com os times (masculinos e femininos separados)
+
+-- Partidas Masculinas (16 times - 16 partidas)
+UPDATE Partida SET id_time_a = 1, id_time_b = 3, status = 'agendada' WHERE id_partida = 1;  -- Altamira x Ananindeua
+UPDATE Partida SET id_time_a = 5, id_time_b = 7, status = 'agendada' WHERE id_partida = 2;  -- Belém x Bragança
+UPDATE Partida SET id_time_a = 9, id_time_b = 11, status = 'agendada' WHERE id_partida = 3;  -- Breves x Cametá
+UPDATE Partida SET id_time_a = 13, id_time_b = 15, status = 'agendada' WHERE id_partida = 4; -- Castanhal x Conceição Araguaia
+UPDATE Partida SET id_time_a = 17, id_time_b = 19, status = 'agendada' WHERE id_partida = 5; -- Itaituba x Marabá Industrial
+UPDATE Partida SET id_time_a = 21, id_time_b = 23, status = 'agendada' WHERE id_partida = 6; -- Marabá Rural x Paragominas
+UPDATE Partida SET id_time_a = 25, id_time_b = 27, status = 'agendada' WHERE id_partida = 7; -- Parauapebas x Santarém
+UPDATE Partida SET id_time_a = 29, id_time_b = 31, status = 'agendada' WHERE id_partida = 8; -- Tucuruí x Vigia
+
+-- Partidas Femininas (16 times - 16 partidas)
+UPDATE Partida SET id_time_a = 2, id_time_b = 4, status = 'agendada' WHERE id_partida = 9;   -- Altamira x Ananindeua
+UPDATE Partida SET id_time_a = 6, id_time_b = 8, status = 'agendada' WHERE id_partida = 10;  -- Belém x Bragança
+UPDATE Partida SET id_time_a = 10, id_time_b = 12, status = 'agendada' WHERE id_partida = 11; -- Breves x Cametá
+UPDATE Partida SET id_time_a = 14, id_time_b = 16, status = 'agendada' WHERE id_partida = 12; -- Castanhal x Conceição Araguaia
+UPDATE Partida SET id_time_a = 18, id_time_b = 20, status = 'agendada' WHERE id_partida = 13; -- Itaituba x Marabá Industrial
+UPDATE Partida SET id_time_a = 22, id_time_b = 24, status = 'agendada' WHERE id_partida = 14; -- Marabá Rural x Paragominas
+UPDATE Partida SET id_time_a = 26, id_time_b = 28, status = 'agendada' WHERE id_partida = 15; -- Parauapebas x Santarém
+UPDATE Partida SET id_time_a = 30, id_time_b = 32, status = 'agendada' WHERE id_partida = 16; -- Tucuruí x Vigia
+
+-- As próximas partidas (17-32) serão para as fases seguintes e podem ficar sem times atribuídos por enquanto
