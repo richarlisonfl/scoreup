@@ -1,27 +1,8 @@
 -- EDICÇÃO DOS JOGOS 2025 (6 dias de jogos - abertura mais 5 dias de jogos)
-INSERT INTO Edicao (nome_edicao, ano, data_inicio, data_fim)
-VALUES ('Jogos IFPA 2026', 2026, '2026-06-01', '2026-06-06');
+INSERT INTO Edicao (nome_edicao, ano, data_inicio, data_fim) VALUES ('Jogos IFPA 2026', 2026, '2026-06-01', '2026-06-06');
 
 -- INSERIR TODOS OS 18 CAMPUS
-INSERT INTO Campus (nome_campus, is_sede) VALUES
-('Abaetetuba', FALSE),
-('Altamira', FALSE),
-('Ananindeua', FALSE),
-('Belém', TRUE),		-- por padrão belem é sede ao iniciar
-('Bragança', FALSE),
-('Breves', FALSE),
-('Cametá', FALSE),
-('Castanhal', FALSE),
-('Conceição do Araguaia', FALSE),
-('Itaituba', FALSE),
-('Marabá Industrial', FALSE),
-('Marabá Rural', FALSE),
-('Óbidos', FALSE),
-('Paragominas', FALSE),
-('Parauapebas', FALSE),
-('Santarém', FALSE),
-('Tucuruí', FALSE),
-('Vigia', FALSE);
+INSERT INTO Campus (nome_campus, is_sede) VALUES ('Abaetetuba', FALSE),('Altamira', FALSE),('Ananindeua', FALSE),('Belém', TRUE),('Bragança', FALSE),('Breves', FALSE),('Cametá', FALSE),('Castanhal', FALSE),('Conceição do Araguaia', FALSE),('Itaituba', FALSE),('Marabá Industrial', FALSE),('Marabá Rural', FALSE),('Óbidos', FALSE),('Paragominas', FALSE),('Parauapebas', FALSE),('Santarém', FALSE),('Tucuruí', FALSE),('Vigia', FALSE);
 
 -- ALTERANDO A SEDE PARA SANTARÉM
 CALL trocar_sede('Paragominas');
