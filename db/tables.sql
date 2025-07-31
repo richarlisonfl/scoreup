@@ -34,7 +34,8 @@ CREATE TABLE Usuario (
     senha VARCHAR(255) NOT NULL,
     id_campus INT NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
-    is_responsavel BOOLEAN NOT NULL DEFAULT FALSE,
+    is_responsavel BOOLEAN NOT NULL DEFAULT TRUE,
+    data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_campus) REFERENCES Campus(id_campus),
     UNIQUE(email)
 );

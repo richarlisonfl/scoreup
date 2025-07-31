@@ -304,17 +304,58 @@ BEGIN
 END //
 
 -- 5. Procedures para Gestão de Times
-CREATE PROCEDURE sp_criar_time(
+CREATE PROCEDURE sp_add_time(
     IN p_nome_time VARCHAR(100),
     IN p_id_edicao INT,
     IN p_id_campus INT,
     IN p_id_modalidade INT,
-    IN p_sexo ENUM('M', 'F')
+    IN p_sexo ENUM('M', 'F'),
+    OUT p_id_time INT
 )
+/*
+Nome: sp_add_time
+Descrição: Cadastra um novo time no sistema com todas as validações necessárias
+Parâmetros:
+  - p_nome_time: Nome do time
+  - p_id_edicao: ID da edição do evento
+  - p_id_campus: ID do campus
+  - p_id_modalidade: ID da modalidade esportiva
+  - p_sexo: Sexo dos participantes ('M' ou 'F')
+  - p_id_time: Retorna o ID do time criado
+Exemplo:
+  CALL sp_add_time('Time A', 1, 1, 1, 'M', @id_time);
+  SELECT @id_time;
+*/
 BEGIN
     DECLARE v_time_existe INT;
+    DECLARE v_modalidade_valida BOOLEAN;
     
-    -- Verificar se time já existe
+    -- Validações básicas
+    IF p_nome_time IS NULL OR p_id_edicao IS NULL OR p_id_campus IS NULL OR 
+       p_id_modalidade IS NULL OR p_sexo IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Todos os parâmetros são obrigatórios';
+    END IF;
+    
+    -- Verificar se edição existe
+    IF NOT EXISTS (SELECT 1 FROM Edicao WHERE id_edicao = p_id_edicao) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Edição não encontrada';
+    END IF;
+    
+    -- Verificar se campus existe
+    IF NOT EXISTS (SELECT 1 FROM Campus WHERE id_campus = p_id_campus) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Campus não encontrado';
+    END IF;
+    
+    -- Verificar se modalidade existe
+    IF NOT EXISTS (SELECT 1 FROM Modalidade WHERE id_modalidade = p_id_modalidade) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Modalidade não encontrada';
+    END IF;
+    
+    -- Verificar se já existe time para mesma combinação
     SELECT COUNT(*) INTO v_time_existe 
     FROM Time 
     WHERE id_edicao = p_id_edicao 
@@ -322,16 +363,56 @@ BEGIN
       AND id_modalidade = p_id_modalidade 
       AND sexo = p_sexo;
     
-    IF v_time_existe = 0 THEN
-        INSERT INTO Time (nome_time, id_edicao, id_campus, id_modalidade, sexo)
-        VALUES (p_nome_time, p_id_edicao, p_id_campus, p_id_modalidade, p_sexo);
-    ELSE
+    IF v_time_existe > 0 THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Já existe um time para esta modalidade, edição, campus e sexo';
     END IF;
+    
+    -- Inserir o novo time
+    INSERT INTO Time (
+        nome_time, 
+        id_edicao, 
+        id_campus, 
+        id_modalidade, 
+        sexo,
+        data_cadastro
+    ) VALUES (
+        p_nome_time, 
+        p_id_edicao, 
+        p_id_campus, 
+        p_id_modalidade, 
+        p_sexo,
+        NOW()
+    );
+    
+    -- Retornar o ID do time criado
+    SET p_id_time = LAST_INSERT_ID();
+    
+    -- Inserir classificação inicial para o time
+    INSERT INTO ClassificacaoModalidade (
+        id_edicao, 
+        id_modalidade, 
+        id_time,
+        pontos,
+        jogos,
+        vitorias,
+        empates,
+        derrotas,
+        sets_pro,
+        sets_contra,
+        pontos_pro,
+        pontos_contra,
+        saldo_sets,
+        saldo_pontos
+    ) VALUES (
+        p_id_edicao,
+        p_id_modalidade,
+        p_id_time,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    );
 END //
 
-CREATE PROCEDURE sp_adicionar_atleta(
+CREATE PROCEDURE sp_add_atleta(
     IN p_nome_atleta VARCHAR(100),
     IN p_matricula VARCHAR(20),
     IN p_curso VARCHAR(50),
@@ -342,84 +423,28 @@ BEGIN
     VALUES (p_nome_atleta, p_matricula, p_curso, p_id_time);
 END //
 
-CREATE PROCEDURE sp_definir_unico_admin(
-    IN p_id_usuario_novo_admin INT
-)
-BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-    
-    START TRANSACTION;
-    
-    -- Primeiro, remover o status de admin de todos os usuários
-    UPDATE Usuario SET is_admin = FALSE WHERE is_admin = TRUE;
-    
-    -- Depois, definir o novo admin
-    UPDATE Usuario 
-    SET is_admin = TRUE 
-    WHERE id_usuario = p_id_usuario_novo_admin;
-    
-    -- Verificar se o usuário existe
-    IF ROW_COUNT() = 0 THEN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Usuário não encontrado';
-    ELSE
-        COMMIT;
-    END IF;
-END //
+
 
 CREATE PROCEDURE sp_trocar_campus_sede(
     IN p_nome_novo_campus VARCHAR(100)
 )
 BEGIN
     DECLARE v_id_novo_campus INT;
-    DECLARE v_id_campus_atual INT;
     
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-    
-    -- Verificar se o campus existe
+    -- Obter ID do campus pelo nome
     SELECT id_campus INTO v_id_novo_campus 
     FROM Campus 
     WHERE nome_campus = p_nome_novo_campus;
     
     IF v_id_novo_campus IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Campus não encontrado';
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Campus não encontrado';
+    ELSE
+        -- Chamar a procedure base que usa ID
+        CALL sp_atualizar_sede_campus(v_id_novo_campus);
     END IF;
-    
-    -- Obter campus sede atual
-    SELECT id_campus INTO v_id_campus_atual 
-    FROM Campus 
-    WHERE is_sede = TRUE;
-    
-    START TRANSACTION;
-    
-    -- Atualizações seguras com WHERE em colunas KEY
-    IF v_id_campus_atual IS NOT NULL THEN
-        UPDATE Campus SET is_sede = FALSE WHERE id_campus = v_id_campus_atual;
-    END IF;
-    
-    UPDATE Campus SET is_sede = TRUE WHERE id_campus = v_id_novo_campus;
-    
-    -- Atualizar administrador usando IDs válidos
-    UPDATE Usuario SET is_admin = FALSE WHERE is_admin = TRUE AND id_campus = v_id_campus_atual;
-    
-    -- Define como admin o primeiro usuário do novo campus (priorizando responsáveis)
-    UPDATE Usuario SET is_admin = TRUE 
-    WHERE id_campus = v_id_novo_campus
-    ORDER BY is_responsavel DESC, id_usuario 
-    LIMIT 1;
-    
-    COMMIT;
 END //
-CREATE PROCEDURE sp_adicionar_local(
+CREATE PROCEDURE sp_add_local(
     IN p_nome_local VARCHAR(100),
     IN p_descricao TEXT,
     IN p_id_campus INT
@@ -438,7 +463,7 @@ BEGIN
     -- Retornar o ID do local inserido
     -- SELECT LAST_INSERT_ID() AS id_local;
 END //
-CREATE PROCEDURE sp_adicionar_modalidade(
+CREATE PROCEDURE sp_add_modalidade(
     IN p_nome_modalidade VARCHAR(50),
     IN p_descricao TEXT,
     IN p_duracao_minutos INT,
@@ -484,53 +509,115 @@ BEGIN
     -- SELECT LAST_INSERT_ID() AS id_modalidade;
 END //
 
-CREATE PROCEDURE sp_adicionar_usuario(
+CREATE PROCEDURE sp_add_usuario(
     IN p_nome_completo VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_senha_aberta VARCHAR(255),
     IN p_id_campus INT,
-    IN p_is_admin BOOLEAN,
-    IN p_is_responsavel BOOLEAN
+    IN p_is_responsavel BOOLEAN,
+    OUT p_id_usuario INT
 )
 BEGIN
+    DECLARE v_is_sede BOOLEAN DEFAULT FALSE;
     DECLARE v_senha_hash VARCHAR(255);
     DECLARE v_email_existe INT;
     
-    -- Criar hash da senha (usando SHA2 como exemplo)
-    SET v_senha_hash = SHA2(p_senha_aberta, 256);
+    -- Validações iniciais
+    IF p_nome_completo IS NULL OR p_email IS NULL OR p_senha_aberta IS NULL OR p_id_campus IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Nome, email, senha e id_campus são obrigatórios';
+    END IF;
     
-    -- Verificar se o email já está cadastrado
+    -- Verificar se email já existe
     SELECT COUNT(*) INTO v_email_existe FROM Usuario WHERE email = p_email;
-    
     IF v_email_existe > 0 THEN
         SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro: Email já cadastrado no sistema';
+        SET MESSAGE_TEXT = 'Email já cadastrado no sistema';
     END IF;
     
-    -- Verificar se o campus existe
-    IF NOT EXISTS (SELECT 1 FROM Campus WHERE id_campus = p_id_campus) THEN
+    -- Verificar se campus existe e obter status de sede
+    SELECT is_sede INTO v_is_sede 
+    FROM Campus 
+    WHERE id_campus = p_id_campus;
+    
+    IF v_is_sede IS NULL THEN
         SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro: Campus não encontrado';
+        SET MESSAGE_TEXT = 'Campus não encontrado';
     END IF;
     
-    -- Inserir o novo usuário
+    -- Criar hash da senha (SHA-256)
+    SET v_senha_hash = SHA2(p_senha_aberta, 256);
+    
+    -- Inserir usuário com transação (SEM data_cadastro)
+    START TRANSACTION;
+    
     INSERT INTO Usuario (
         nome_completo, 
         email, 
         senha, 
         id_campus, 
         is_admin, 
-        is_responsavel
+        is_responsavel  -- Removido data_cadastro
     ) VALUES (
-        p_nome_completo,
-        p_email,
-        v_senha_hash,
-        p_id_campus,
-        IFNULL(p_is_admin, FALSE),
+        p_nome_completo, 
+        p_email, 
+        v_senha_hash, 
+        p_id_campus, 
+        v_is_sede,
         IFNULL(p_is_responsavel, FALSE)
     );
     
-    -- Retornar o ID do usuário inserido
-    --  SELECT LAST_INSERT_ID() AS id_usuario;
+    -- Obter e retornar o ID do usuário inserido
+    SET p_id_usuario = LAST_INSERT_ID();
+    
+    -- Se for do campus sede, garantir que é o único admin
+    IF v_is_sede = TRUE THEN
+        UPDATE Usuario SET is_admin = FALSE 
+        WHERE id_campus = p_id_campus AND id_usuario != p_id_usuario;
+        
+        UPDATE Usuario SET is_admin = TRUE 
+        WHERE id_usuario = p_id_usuario;
+    END IF;
+    
+    COMMIT;
+END //
+
+CREATE PROCEDURE sp_atualizar_sede_campus(
+    IN p_id_novo_campus_sede INT
+)
+BEGIN
+    DECLARE v_id_atual_sede INT;
+    
+    START TRANSACTION;
+    
+    -- Obter campus sede atual (usando WHERE com KEY)
+    SELECT id_campus INTO v_id_atual_sede FROM Campus WHERE is_sede = TRUE LIMIT 1;
+    
+    -- Atualizar apenas o campus sede atual (usando WHERE com KEY)
+    IF v_id_atual_sede IS NOT NULL THEN
+        UPDATE Campus SET is_sede = FALSE WHERE id_campus = v_id_atual_sede;
+    END IF;
+    
+    -- Definir novo campus sede (usando WHERE com KEY)
+    UPDATE Campus SET is_sede = TRUE WHERE id_campus = p_id_novo_campus_sede;
+    
+    -- Atualizar privilégios admin (agora em duas etapas)
+    -- 1. Remover admin de todos os usuários do campus que era sede
+    IF v_id_atual_sede IS NOT NULL THEN
+        UPDATE Usuario SET is_admin = FALSE WHERE id_campus = v_id_atual_sede;
+    END IF;
+    
+    -- 2. Definir como admin um usuário do novo campus sede (usando WHERE com KEY)
+    UPDATE Usuario u
+    JOIN (
+        SELECT id_usuario 
+        FROM Usuario 
+        WHERE id_campus = p_id_novo_campus_sede
+        ORDER BY is_responsavel DESC, id_usuario
+        LIMIT 1
+    ) AS novo_admin ON u.id_usuario = novo_admin.id_usuario
+    SET u.is_admin = TRUE;
+    
+    COMMIT;
 END //
 DELIMITER ;
