@@ -1,3 +1,4 @@
+-- Active: 1754486842803@@127.0.0.1@3306@scoreup
 -- 1. Procedures para Gestão de Partidas
 DELIMITER //
 CREATE PROCEDURE sp_agendar_partida(

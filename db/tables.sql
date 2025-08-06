@@ -71,7 +71,7 @@ CREATE TABLE Local (
     id_campus INT NOT NULL,
     FOREIGN KEY (id_campus) REFERENCES Campus(id_campus)
 );
--- INSERT INTO Partida (data_hora, duracao_minutos, status, id_local, id_modalidade, id_edicao) VALUES
+
 CREATE TABLE Partida (
     id_partida INT PRIMARY KEY AUTO_INCREMENT, -- 1
     id_edicao INT NOT NULL, -- 1
