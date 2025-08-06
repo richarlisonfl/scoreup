@@ -1,0 +1,20 @@
+[Administração do Sistema - Reitoria]
+  > Cadastro da Edição
+   > Nova Edição (Botão);
+    - Ano (Caixa de Texto/Número);
+    - Nome da Edição (Caixa de Texto);
+    - Data de Início (Data); --> Pode ser Alterado pelo CS
+    - Data de Termino (Data); --> Pode ser Alterado pelo CS
+  > Cadastrar Campus e Usuários
+    - Pré-Cadastrar (Botão) --> Insere todos os campus, cria todos os usuários com senha provisória e aleatória, o usuário administrador pode alterar a senha de cada usuário;
+[Campus Sede]
+  > Edição dos Jogos
+    - Visualiza Ano;
+    - Visualiza Nome;
+    - Visualiza Data de Início (Botão ao lado "Alterar");
+    - Visualiza Data de Término (Botão ao lado "Alterar");
+  >
+[Campus Visitante]
+  >
+  >
+[Vista Pública]

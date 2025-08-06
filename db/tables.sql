@@ -8,7 +8,7 @@ CREATE TABLE Edicao (
     ano YEAR NOT NULL,
     data_inicio DATE,
     data_fim DATE,
-    UNIQUE (nome_edicao, ano)
+    UNIQUE (nome_edicao , ano)
 );
 
 CREATE TABLE Campus (
@@ -24,7 +24,7 @@ CREATE TABLE Modalidade (
     duracao_minutos INT DEFAULT 60,
     pontos_vitoria INT DEFAULT 3,
     pontos_empate INT DEFAULT 1,
-    UNIQUE(nome_modalidade)
+    UNIQUE (nome_modalidade)
 );
 
 CREATE TABLE Usuario (
@@ -36,8 +36,9 @@ CREATE TABLE Usuario (
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     is_responsavel BOOLEAN NOT NULL DEFAULT TRUE,
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_campus) REFERENCES Campus(id_campus),
-    UNIQUE(email)
+    FOREIGN KEY (id_campus)
+        REFERENCES Campus (id_campus),
+    UNIQUE (email)
 );
 
 CREATE TABLE Time (
@@ -48,10 +49,13 @@ CREATE TABLE Time (
     id_modalidade INT NOT NULL,
     sexo ENUM('M', 'F') NOT NULL,
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
-    FOREIGN KEY (id_campus) REFERENCES Campus(id_campus),
-    FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
-    UNIQUE(id_edicao, id_campus, id_modalidade, sexo)
+    FOREIGN KEY (id_edicao)
+        REFERENCES Edicao (id_edicao),
+    FOREIGN KEY (id_campus)
+        REFERENCES Campus (id_campus),
+    FOREIGN KEY (id_modalidade)
+        REFERENCES Modalidade (id_modalidade),
+    UNIQUE (id_edicao , id_campus , id_modalidade , sexo)
 );
 
 CREATE TABLE Atleta (
@@ -60,34 +64,40 @@ CREATE TABLE Atleta (
     matricula VARCHAR(20),
     curso VARCHAR(50),
     id_time INT NOT NULL,
-    FOREIGN KEY (id_time) REFERENCES Time(id_time)
+    FOREIGN KEY (id_time)
+        REFERENCES Time (id_time)
 );
 
 CREATE TABLE Local (
     id_local INT PRIMARY KEY AUTO_INCREMENT,
     nome_local VARCHAR(100) NOT NULL,
     descricao TEXT,
-    -- capacidade INT,
     id_campus INT NOT NULL,
-    FOREIGN KEY (id_campus) REFERENCES Campus(id_campus)
+    FOREIGN KEY (id_campus)
+        REFERENCES Campus (id_campus)
 );
 
 CREATE TABLE Partida (
-    id_partida INT PRIMARY KEY AUTO_INCREMENT, -- 1
-    id_edicao INT NOT NULL, -- 1
-    id_modalidade INT NOT NULL, -- 6
-    id_time_a INT NULL,  -- Alterado para permitir NULL
-    id_time_b INT NULL,  -- Alterado para permitir NULL
+    id_partida INT PRIMARY KEY AUTO_INCREMENT,
+    id_edicao INT NOT NULL,
+    id_modalidade INT NOT NULL,
+    id_time_a INT NULL,
+    id_time_b INT NULL,
     data_hora DATETIME NOT NULL,
-    duracao_minutos INT NULL,  -- Adicionado
+    duracao_minutos INT NULL,
     id_local INT NULL,
     observacao VARCHAR(50) NULL,
-    status ENUM('sem_time_atribuida','agendada', 'em_andamento', 'concluida', 'cancelada') DEFAULT 'sem_time_atribuida',
-    FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
-    FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
-    FOREIGN KEY (id_time_a) REFERENCES Time(id_time),
-    FOREIGN KEY (id_time_b) REFERENCES Time(id_time),
-    FOREIGN KEY (id_local) REFERENCES Local(id_local)
+    status ENUM('agendada', 'em_andamento', 'concluida', 'cancelada') DEFAULT 'agendada',
+    FOREIGN KEY (id_edicao)
+        REFERENCES Edicao (id_edicao),
+    FOREIGN KEY (id_modalidade)
+        REFERENCES Modalidade (id_modalidade),
+    FOREIGN KEY (id_time_a)
+        REFERENCES Time (id_time),
+    FOREIGN KEY (id_time_b)
+        REFERENCES Time (id_time),
+    FOREIGN KEY (id_local)
+        REFERENCES Local (id_local)
 );
 
 CREATE TABLE Resultado (
@@ -101,10 +111,13 @@ CREATE TABLE Resultado (
     observacoes TEXT,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_usuario_registro INT NOT NULL,
-    FOREIGN KEY (id_partida) REFERENCES Partida(id_partida),
-    FOREIGN KEY (vencedor) REFERENCES Time(id_time),
-    FOREIGN KEY (id_usuario_registro) REFERENCES Usuario(id_usuario),
-    UNIQUE(id_partida)
+    FOREIGN KEY (id_partida)
+        REFERENCES Partida (id_partida),
+    FOREIGN KEY (vencedor)
+        REFERENCES Time (id_time),
+    FOREIGN KEY (id_usuario_registro)
+        REFERENCES Usuario (id_usuario),
+    UNIQUE (id_partida)
 );
 
 CREATE TABLE ClassificacaoModalidade (
@@ -123,10 +136,13 @@ CREATE TABLE ClassificacaoModalidade (
     pontos_contra INT NOT NULL DEFAULT 0,
     saldo_sets INT NOT NULL DEFAULT 0,
     saldo_pontos INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
-    FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
-    FOREIGN KEY (id_time) REFERENCES Time(id_time),
-    UNIQUE(id_edicao, id_modalidade, id_time)
+    FOREIGN KEY (id_edicao)
+        REFERENCES Edicao (id_edicao),
+    FOREIGN KEY (id_modalidade)
+        REFERENCES Modalidade (id_modalidade),
+    FOREIGN KEY (id_time)
+        REFERENCES Time (id_time),
+    UNIQUE (id_edicao , id_modalidade , id_time)
 );
 
 CREATE TABLE ClassificacaoGeral (
@@ -137,9 +153,11 @@ CREATE TABLE ClassificacaoGeral (
     total_vitorias INT NOT NULL DEFAULT 0,
     total_empates INT NOT NULL DEFAULT 0,
     total_derrotas INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
-    FOREIGN KEY (id_campus) REFERENCES Campus(id_campus),
-    UNIQUE(id_edicao, id_campus)
+    FOREIGN KEY (id_edicao)
+        REFERENCES Edicao (id_edicao),
+    FOREIGN KEY (id_campus)
+        REFERENCES Campus (id_campus),
+    UNIQUE (id_edicao , id_campus)
 );
 
 CREATE TABLE Noticia (
@@ -148,10 +166,10 @@ CREATE TABLE Noticia (
     conteudo TEXT NOT NULL,
     data_publicacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_usuario_publicacao INT NOT NULL,
-    FOREIGN KEY (id_usuario_publicacao) REFERENCES Usuario(id_usuario)
+    FOREIGN KEY (id_usuario_publicacao)
+        REFERENCES Usuario (id_usuario)
 );
 
--- Tabela para armazenar o cronograma das partidas
 CREATE TABLE CronogramaPartidas (
     id_cronograma INT PRIMARY KEY AUTO_INCREMENT,
     id_edicao INT NOT NULL,
@@ -160,13 +178,18 @@ CREATE TABLE CronogramaPartidas (
     data_partida DATE NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fim TIME NOT NULL,
-    id_time_a INT, -- Preenchido após sorteio
-    id_time_b INT, -- Preenchido após sorteio
+    id_time_a INT,
+    id_time_b INT,
     fase VARCHAR(50),
     status ENUM('agendada', 'realizada', 'cancelada') DEFAULT 'agendada',
-    FOREIGN KEY (id_edicao) REFERENCES Edicao(id_edicao),
-    FOREIGN KEY (id_modalidade) REFERENCES Modalidade(id_modalidade),
-    FOREIGN KEY (id_local) REFERENCES Local(id_local),
-    FOREIGN KEY (id_time_a) REFERENCES Time(id_time),
-    FOREIGN KEY (id_time_b) REFERENCES Time(id_time)
+    FOREIGN KEY (id_edicao)
+        REFERENCES Edicao (id_edicao),
+    FOREIGN KEY (id_modalidade)
+        REFERENCES Modalidade (id_modalidade),
+    FOREIGN KEY (id_local)
+        REFERENCES Local (id_local),
+    FOREIGN KEY (id_time_a)
+        REFERENCES Time (id_time),
+    FOREIGN KEY (id_time_b)
+        REFERENCES Time (id_time)
 );
