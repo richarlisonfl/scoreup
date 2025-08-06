@@ -1,0 +1,107 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin",
+      "name": "Administrador",
+      "role": "admin",
+      "permissions": ["edicao", "usuario", "campus", "modalidade", "local"]
+    },
+    {
+      "username": "pgm",
+      "password": "pgm",
+      "name": "Professor",
+      "role": "professor",
+      "permissions": ["modalidade", "local"]
+    }
+  ],
+  "cadastroCards": {
+    "edicao": {
+      "title": "Edições",
+      "description": "Gerencie as edições dos jogos internos",
+      "icon": "fa-calendar-alt",
+      "formId": "edicaoForm",
+      "order": 1
+    },
+    "usuario": {
+      "title": "Usuários",
+      "description": "Gerencie os usuários do sistema",
+      "icon": "fa-user",
+      "formId": "usuarioForm",
+      "order": 2
+    },
+    "campus": {
+      "title": "Campi",
+      "description": "Cadastro dos campi participantes",
+      "icon": "fa-school",
+      "formId": "campusForm",
+      "order": 3
+    },
+    "modalidade": {
+      "title": "Modalidades",
+      "description": "Cadastro de esportes e categorias",
+      "icon": "fa-futbol",
+      "formId": "modalidadeForm",
+      "order": 4
+    },
+    "local": {
+      "title": "Locais",
+      "description": "Cadastro dos locais de competição",
+      "icon": "fa-map-marker-alt",
+      "formId": "localForm",
+      "order": 5
+    }
+  },
+  "edicoes": [
+    
+  ],
+
+  "perfis": [
+    { "value": "admin", "label": "Administrador" },
+    { "value": "professor", "label": "Professor" }
+  ],
+  "campi": [
+  { "value": "abaetetuba", "label": "Abaetetuba" },
+  { "value": "altamira", "label": "Altamira" },
+  { "value": "ananindeua", "label": "Ananindeua" },
+  { "value": "belem", "label": "Belém" },
+  { "value": "braganca", "label": "Bragança" },
+  { "value": "breves", "label": "Breves" },
+  { "value": "cameta", "label": "Cametá" },
+  { "value": "castanhal", "label": "Castanhal" },
+  { "value": "conceicao_do_araguaia", "label": "Conceição do Araguaia" },
+  { "value": "itaituba", "label": "Itaituba" },
+  { "value": "maraba_industrial", "label": "Marabá Industrial" },
+  { "value": "maraba_rural", "label": "Marabá Rural" },
+  { "value": "obidos", "label": "Óbidos" },
+  { "value": "paragominas", "label": "Paragominas" },
+  { "value": "parauapebas", "label": "Parauapebas" },
+  { "value": "santarem", "label": "Santarém" },
+  { "value": "tucurui", "label": "Tucuruí" },
+  { "value": "vigia", "label": "Vigia (Campus Avançado)" }
+]
+,
+  "modalidades": [
+    "Futsal",
+    "Vôlei",
+    "Xadrez",
+    "Natação",
+    "Atletismo"
+  ],
+  "locais": [
+    "Ginásio Central",
+    "Quadra Externa",
+    "Piscina Olímpica",
+    "Estádio Municipal"
+  ],
+  "generos": [
+    "Masculino",
+    "Feminino",
+    "Misto"
+  ],
+  "etapas": [
+    "Classificatória",
+    "Semifinal",
+    "Final"
+  ]
+}

@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogos Internos IFPA - Sistema de Cadastros</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <!-- Tela de Login (inicialmente oculta) -->
+  <div id="loginScreen" class="login-container hidden">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="flex items-center justify-center mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold">IFPA</h1>
+        <p class="text-sm opacity-80">Sistema de Cadastros</p>
+      </div>
+
+      <div class="login-form">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">Acesso ao Sistema</h2>
+
+        <form id="loginForm">
+          <div class="login-input">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" placeholder="Nome de usuário" required>
+          </div>
+
+          <div class="login-input">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Senha" required>
+          </div>
+
+          <div class="flex items-center mb-4">
+            <input type="checkbox" id="remember"
+              class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+            <label for="remember" class="ml-2 text-sm text-gray-600">Lembrar-me</label>
+          </div>
+
+          <div id="loginError" class="text-red-500 text-sm mb-4 hidden">
+            Usuário ou senha incorretos. Tente novamente.
+          </div>
+
+          <button type="submit" class="login-button">
+            <span id="loginButtonText">Entrar</span>
+            <span id="loginButtonLoading" class="hidden">
+              <i class="fas fa-circle-notch fa-spin"></i> Processando...
+            </span>
+          </button>
+        </form>
+      </div>
+
+      <div class="login-footer">
+        <a href="#" class="text-sm">Esqueceu sua senha?</a>
+        <div class="mt-2">
+          <button id="closeLoginButton" class="text-sm text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times mr-1"></i> Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sistema Principal (visível para todos) -->
+  <div id="mainSystem">
+    <!-- Cabeçalho -->
+    <header class="ifpa-green text-white py-4 px-6 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+          <div class="mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold">IFPA</h1>
+            <p class="text-sm opacity-80">Jogos Internos</p>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="flex space-x-4">
+            <a href="#" id="navInicio"
+              class="text-white bg-green-800 px-3 py-2 rounded-md text-sm font-medium nav-link active">Início</a>
+            <!-- <a href="#" id="navCadastros" -->
+            <a href="#" id="navCadastros"
+              class="text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium user-area nav-link">Cadastros</a>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <!-- Área de usuário não logado -->
+          <div id="guestArea">
+            <button id="showLoginButton" class="login-nav-button">
+              <i class="fas fa-sign-in-alt mr-1"></i> Entrar
+            </button>
+          </div>
+
+          <!-- Área de usuário logado (inicialmente oculta) -->
+          <div id="userArea" class="user-area">
+            <div class="mr-4 hidden md:block">
+              <span id="userDisplayName" class="text-sm">Olá, Usuário</span>
+            </div>
+            <button id="logoutButton"
+              class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-3 py-1 rounded-md text-sm">
+              <i class="fas fa-sign-out-alt mr-1"></i> Sair
+            </button>
+          </div>
+
+          <div class="md:hidden ml-4">
+            <button id="mobile-menu-button" class="text-white">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu mobile -->
+      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-2">
+        <div class="flex flex-col space-y-2">
+          <a href="#" id="navInicioMobile"
+            class="text-white bg-green-800 px-3 py-2 rounded-md text-sm font-medium">Início</a>
+          <a href="#" id="navCadastrosMobile"
+            class="text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium user-area">Cadastros</a>
+
+          <!-- Área de usuário não logado (mobile) -->
+          <div id="guestAreaMobile" class="pt-2 mt-2 border-t border-white border-opacity-20">
+            <button id="showLoginButtonMobile"
+              class="w-full text-left bg-white text-green-800 px-3 py-2 rounded-md text-sm font-medium">
+              <i class="fas fa-sign-in-alt mr-1"></i> Entrar
+            </button>
+          </div>
+
+          <!-- Área de usuário logado (mobile, inicialmente oculta) -->
+          <div id="userAreaMobile" class="user-area border-t border-white border-opacity-20 pt-2 mt-2">
+            <span class="text-sm px-3 py-2 block">Olá, <span id="userDisplayNameMobile">Usuário</span></span>
+            <button id="logoutButtonMobile"
+              class="text-white bg-red-700 hover:bg-red-800 px-3 py-2 rounded-md text-sm font-medium text-left w-full">
+              <i class="fas fa-sign-out-alt mr-1"></i> Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="container mx-auto py-8 px-4">
+      <!-- Tela de Início (visível para todos) -->
+      <div id="telaInicio" class="animate-fadeIn">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Jogos Internos do IFPA</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Acompanhe o desempenho dos campi do IFPA nos Jogos Internos. Confira o ranking de medalhas e pontuação
+            geral.
+          </p>
+        </div>
+
+        <!-- Cards de estatísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="stats-card">
+            <div class="stats-icon bg-yellow-100 text-yellow-500">
+              <i class="fas fa-medal text-2xl"></i>
+            </div>
+            <h3 class="text-gray-500 text-sm">Total de Medalhas</h3>
+            <p class="text-3xl font-bold text-gray-800">126</p>
+            <p class="text-sm text-gray-500 mt-2">42 Ouro, 42 Prata, 42 Bronze</p>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon bg-blue-100 text-blue-500">
+              <i class="fas fa-users text-2xl"></i>
+            </div>
+            <h3 class="text-gray-500 text-sm">Campi Participantes</h3>
+            <p class="text-3xl font-bold text-gray-800">18</p>
+            <p class="text-sm text-gray-500 mt-2">100% dos campi do IFPA</p>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon bg-green-100 text-green-500">
+              <i class="fas fa-running text-2xl"></i>
+            </div>
+            <h3 class="text-gray-500 text-sm">Modalidades</h3>
+            <p class="text-3xl font-bold text-gray-800">14</p>
+            <p class="text-sm text-gray-500 mt-2">Individuais e coletivas</p>
+          </div>
+
+          <div class="stats-card">
+            <div class="stats-icon bg-purple-100 text-purple-500">
+              <i class="fas fa-calendar-alt text-2xl"></i>
+            </div>
+            <h3 class="text-gray-500 text-sm">Dias de Competição</h3>
+            <p class="text-3xl font-bold text-gray-800">7</p>
+            <p class="text-sm text-gray-500 mt-2">15 a 21 de Outubro</p>
+          </div>
+        </div>
+
+        <!-- Abas -->
+        <div class="tab-container">
+          <div class="tab active" data-tab="ranking">Ranking Geral</div>
+          <div class="tab" data-tab="medalhas">Quadro de Medalhas</div>
+          <div class="tab" data-tab="modalidades">Modalidades</div>
+        </div>
+
+        <!-- Conteúdo das abas -->
+        <div id="ranking" class="tab-content active">
+          <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Ranking Geral de Pontos</h3>
+            <p class="text-gray-600 mb-6">Classificação dos campi com base na pontuação total acumulada em todas as
+              modalidades.</p>
+
+            <div class="overflow-x-auto">
+              <table class="ranking-table">
+                <thead>
+                  <tr>
+                    <th class="w-16">Pos.</th>
+                    <th>Campus</th>
+                    <th class="w-24 text-center">Pontos</th>
+                    <th class="w-1/3">Progresso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="medal medal-gold">1</div>
+                    </td>
+                    <td class="font-medium">IFPA Belém</td>
+                    <td class="text-center font-bold">245</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="medal medal-silver">2</div>
+                    </td>
+                    <td class="font-medium">IFPA Castanhal</td>
+                    <td class="text-center font-bold">218</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 89%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="medal medal-bronze">3</div>
+                    </td>
+                    <td class="font-medium">IFPA Marabá</td>
+                    <td class="text-center font-bold">196</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">4</td>
+                    <td>IFPA Santarém</td>
+                    <td class="text-center">175</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 71%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">5</td>
+                    <td>IFPA Tucuruí</td>
+                    <td class="text-center">162</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 66%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">6</td>
+                    <td>IFPA Altamira</td>
+                    <td class="text-center">154</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 63%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">7</td>
+                    <td>IFPA Abaetetuba</td>
+                    <td class="text-center">143</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 58%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">8</td>
+                    <td>IFPA Paragominas</td>
+                    <td class="text-center">135</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 55%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">9</td>
+                    <td>IFPA Breves</td>
+                    <td class="text-center">128</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 52%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">10</td>
+                    <td>IFPA Itaituba</td>
+                    <td class="text-center">117</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 48%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">11</td>
+                    <td>IFPA Cametá</td>
+                    <td class="text-center">105</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 43%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">12</td>
+                    <td>IFPA Óbidos</td>
+                    <td class="text-center">98</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">13</td>
+                    <td>IFPA Parauapebas</td>
+                    <td class="text-center">87</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 36%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">14</td>
+                    <td>IFPA Vigia</td>
+                    <td class="text-center">76</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 31%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">15</td>
+                    <td>IFPA Conceição do Araguaia</td>
+                    <td class="text-center">65</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 27%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">16</td>
+                    <td>IFPA Ananindeua</td>
+                    <td class="text-center">54</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 22%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">17</td>
+                    <td>IFPA Rurópolis</td>
+                    <td class="text-center">42</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 17%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">18</td>
+                    <td>IFPA Aveiro</td>
+                    <td class="text-center">35</td>
+                    <td>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 14%"></div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-500">
+              <p>* Pontuação atualizada em: 18/10/2023 às 18:30</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="medalhas" class="tab-content">
+          <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Quadro de Medalhas</h3>
+            <p class="text-gray-600 mb-6">Distribuição de medalhas por campus nas competições dos Jogos Internos do
+              IFPA.</p>
+
+            <div class="overflow-x-auto">
+              <table class="ranking-table">
+                <thead>
+                  <tr>
+                    <th class="w-16">Pos.</th>
+                    <th>Campus</th>
+                    <th class="text-center bg-yellow-50">
+                      <span class="flex items-center justify-center">
+                        <i class="fas fa-medal text-yellow-500 mr-1"></i> Ouro
+                      </span>
+                    </th>
+                    <th class="text-center bg-gray-50">
+                      <span class="flex items-center justify-center">
+                        <i class="fas fa-medal text-gray-400 mr-1"></i> Prata
+                      </span>
+                    </th>
+                    <th class="text-center bg-yellow-100">
+                      <span class="flex items-center justify-center">
+                        <i class="fas fa-medal text-yellow-700 mr-1"></i> Bronze
+                      </span>
+                    </th>
+                    <th class="text-center">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="medal medal-gold">1</div>
+                    </td>
+                    <td class="font-medium">IFPA Belém</td>
+                    <td class="text-center font-bold">12</td>
+                    <td class="text-center">8</td>
+                    <td class="text-center">6</td>
+                    <td class="text-center font-bold">26</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="medal medal-silver">2</div>
+                    </td>
+                    <td class="font-medium">IFPA Castanhal</td>
+                    <td class="text-center font-bold">10</td>
+                    <td class="text-center">9</td>
+                    <td class="text-center">5</td>
+                    <td class="text-center font-bold">24</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="medal medal-bronze">3</div>
+                    </td>
+                    <td class="font-medium">IFPA Marabá</td>
+                    <td class="text-center font-bold">8</td>
+                    <td class="text-center">7</td>
+                    <td class="text-center">7</td>
+                    <td class="text-center font-bold">22</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">4</td>
+                    <td>IFPA Santarém</td>
+                    <td class="text-center">5</td>
+                    <td class="text-center">6</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">15</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">5</td>
+                    <td>IFPA Tucuruí</td>
+                    <td class="text-center">3</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">5</td>
+                    <td class="text-center">12</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">6</td>
+                    <td>IFPA Altamira</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">3</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">9</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">7</td>
+                    <td>IFPA Abaetetuba</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">3</td>
+                    <td class="text-center">6</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">8</td>
+                    <td>IFPA Paragominas</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">4</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">9</td>
+                    <td>IFPA Breves</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">3</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">10</td>
+                    <td>IFPA Itaituba</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">2</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">11</td>
+                    <td>IFPA Cametá</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">12</td>
+                    <td>IFPA Óbidos</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">13</td>
+                    <td>IFPA Parauapebas</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">14</td>
+                    <td>IFPA Vigia</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">15</td>
+                    <td>IFPA Conceição do Araguaia</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">16</td>
+                    <td>IFPA Ananindeua</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">17</td>
+                    <td>IFPA Rurópolis</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">18</td>
+                    <td>IFPA Aveiro</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="bg-gray-50">
+                    <td colspan="2" class="font-bold">Total</td>
+                    <td class="text-center font-bold">42</td>
+                    <td class="text-center font-bold">42</td>
+                    <td class="text-center font-bold">42</td>
+                    <td class="text-center font-bold">126</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-500">
+              <p>* Quadro de medalhas atualizado em: 18/10/2023 às 18:30</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="modalidades" class="tab-content">
+          <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Modalidades dos Jogos</h3>
+            <p class="text-gray-600 mb-6">Confira as modalidades disputadas nos Jogos Internos do IFPA.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-futbol text-green-600 mr-2"></i> Futebol
+                </h4>
+                <p class="text-gray-600">Competição masculina e feminina</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Campo do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-volleyball-ball text-orange-500 mr-2"></i> Vôlei
+                </h4>
+                <p class="text-gray-600">Competição masculina e feminina</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Ginásio do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-basketball-ball text-orange-600 mr-2"></i> Basquete
+                </h4>
+                <p class="text-gray-600">Competição masculina e feminina</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Ginásio do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-table-tennis text-blue-600 mr-2"></i> Tênis de Mesa
+                </h4>
+                <p class="text-gray-600">Competição individual e em duplas</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Salão de Jogos do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-running text-purple-600 mr-2"></i> Atletismo
+                </h4>
+                <p class="text-gray-600">Corridas, saltos e arremessos</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Pista de Atletismo do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-swimmer text-blue-500 mr-2"></i> Natação
+                </h4>
+                <p class="text-gray-600">Provas individuais e revezamentos</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Piscina Olímpica do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-chess text-gray-700 mr-2"></i> Xadrez
+                </h4>
+                <p class="text-gray-600">Competição individual</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Biblioteca do IFPA Belém</p>
+              </div>
+
+              <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <h4 class="font-bold text-lg mb-2 flex items-center">
+                  <i class="fas fa-fist-raised text-red-600 mr-2"></i> Judô
+                </h4>
+                <p class="text-gray-600">Competição por categorias de peso</p>
+                <p class="text-sm text-gray-500 mt-2">Local: Dojo do IFPA Belém</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tela de Cadastros (inicialmente oculta) -->
+      <div id="telaCadastros" class="hidden">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Bem-vindo ao Sistema de Cadastros</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Gerencie todos os cadastros do Instituto Federal do Pará de forma simples e eficiente.
+            Selecione abaixo a categoria que deseja cadastrar.
+          </p>
+        </div>
+
+        <!-- Menu de cadastros (sempre visível) -->
+        <div class="card-grid mb-8" id="menuCardGrid">
+          <!-- Cards serão inseridos dinamicamente com base no perfil do usuário -->
+        </div>
+      </div>
+
+      <!-- Formulários de cadastro -->
+      <div id="formContainer" class="mt-8">
+        <!-- Formulário Edição -->
+        <div id="edicaoForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Edição</h3>
+            <button onclick="hideForm('edicaoForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form id="formEdicao">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="edicaoNome">
+                Nome da Edição*
+              </label>
+              <input class="form-input" id="edicaoNome" type="text" placeholder="Ex: Jogos Internos 2023" required>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="edicaoAno">
+                Ano*
+              </label>
+              <input class="form-input" id="edicaoAno" type="number" min="2000" max="2100" value={new
+                Date().getFullYear()} required>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="edicaoInicio">
+                  Data de Início*
+                </label>
+                <input class="form-input" id="edicaoInicio" type="date" required>
+              </div>
+
+              <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="edicaoFim">
+                  Data de Término*
+                </label>
+                <input class="form-input" id="edicaoFim" type="date" required>
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('edicaoForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+        <!-- Formulário Usuário -->
+        <div id="usuarioForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Usuário</h3>
+            <button onclick="hideForm('usuarioForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'usuario')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="usuarioNome">Nome Completo</label>
+              <input class="form-input" id="usuarioNome" name="name" type="text" placeholder="Nome completo" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="usuarioEmail">E-mail</label>
+              <input class="form-input" id="usuarioEmail" name="username" type="email" placeholder="email@exemplo.com"
+                required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="usuarioPerfil">Perfil</label>
+              <select class="form-input" id="usuarioPerfil" name="role" required></select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="usuarioCampus">Campus</label>
+              <select class="form-input" id="usuarioCampus" name="campus" required></select>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('usuarioForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancelar</button>
+              <button type="submit"
+                class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">Salvar</button>
+            </div>
+          </form>
+          <hr class="my-6 border-gray-300">
+          <div id="listaUsuarios"></div>
+        </div>
+
+
+        <!-- Formulário Campus -->
+        <div id="campusForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Campus</h3>
+            <button onclick="hideForm('campusForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'campus')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="campusNome">
+                Nome do Campus
+              </label>
+              <input class="form-input" id="campusNome" type="text" placeholder="Ex: IFPA Belém" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="campusEndereco">
+                Endereço
+              </label>
+              <input class="form-input" id="campusEndereco" type="text" placeholder="Endereço completo" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="campusTelefone">
+                Telefone
+              </label>
+              <input class="form-input" id="campusTelefone" type="tel" placeholder="(00) 00000-0000">
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('campusForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulário Modalidade -->
+        <div id="modalidadeForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Modalidade</h3>
+            <button onclick="hideForm('modalidadeForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'modalidade')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="modalidadeNome">
+                Nome da Modalidade
+              </label>
+              <input class="form-input" id="modalidadeNome" type="text" placeholder="Ex: Futebol" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="modalidadeTipo">
+                Tipo
+              </label>
+              <select class="form-input" id="modalidadeTipo" required>
+                <option value="">Selecione um tipo</option>
+                <option value="individual">Individual</option>
+                <option value="coletivo">Coletivo</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="modalidadeDescricao">
+                Descrição
+              </label>
+              <textarea class="form-input" id="modalidadeDescricao" rows="3"
+                placeholder="Descrição da modalidade"></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('modalidadeForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulário Local dos Jogos -->
+        <div id="localForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Local dos Jogos</h3>
+            <button onclick="hideForm('localForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'local')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localNome">
+                Nome do Local
+              </label>
+              <input class="form-input" id="localNome" type="text" placeholder="Ex: Ginásio Poliesportivo IFPA"
+                required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localEndereco">
+                Endereço
+              </label>
+              <input class="form-input" id="localEndereco" type="text" placeholder="Rua/Avenida" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localNumero">
+                Número
+              </label>
+              <input class="form-input" id="localNumero" type="text" placeholder="Número" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localBairro">
+                Bairro
+              </label>
+              <input class="form-input" id="localBairro" type="text" placeholder="Bairro" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localCidade">
+                Cidade
+              </label>
+              <input class="form-input" id="localCidade" type="text" placeholder="Cidade" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localCapacidade">
+                Capacidade
+              </label>
+              <input class="form-input" id="localCapacidade" type="number" placeholder="Capacidade de pessoas" min="0">
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="localTipo">
+                Tipo de Local
+              </label>
+              <select class="form-input" id="localTipo">
+                <option value="">Selecione um tipo</option>
+                <option value="ginasio">Ginásio</option>
+                <option value="campo">Campo</option>
+                <option value="quadra">Quadra</option>
+                <option value="piscina">Piscina</option>
+                <option value="pista">Pista de Atletismo</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('localForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulário Time -->
+        <div id="timeForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Time</h3>
+            <button onclick="hideForm('timeForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'time')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="timeNome">
+                Nome do Time
+              </label>
+              <input class="form-input" id="timeNome" type="text" placeholder="Ex: IFPA Futebol" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="timeModalidade">
+                Modalidade
+              </label>
+              <select class="form-input" id="timeModalidade" required>
+                <option value="">Selecione uma modalidade</option>
+                <option value="futebol">Futebol</option>
+                <option value="volei">Vôlei</option>
+                <option value="basquete">Basquete</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="timeCampus">
+                Campus
+              </label>
+              <select class="form-input" id="timeCampus" required>
+                <option value="">Selecione um campus</option>
+                <option value="belem">Belém</option>
+                <option value="castanhal">Castanhal</option>
+                <option value="maraba">Marabá</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="timeTecnico">
+                Técnico Responsável
+              </label>
+              <input class="form-input" id="timeTecnico" type="text" placeholder="Nome do técnico">
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('timeForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulário Atleta -->
+        <div id="atletaForm" class="form-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">Cadastro de Atleta</h3>
+            <button onclick="hideForm('atletaForm')" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form onsubmit="submitForm(event, 'atleta')">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="atletaNome">
+                Nome Completo
+              </label>
+              <input class="form-input" id="atletaNome" type="text" placeholder="Nome completo" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="atletaMatricula">
+                Matrícula
+              </label>
+              <input class="form-input" id="atletaMatricula" type="text" placeholder="Número de matrícula" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="atletaDataNasc">
+                Data de Nascimento
+              </label>
+              <input class="form-input" id="atletaDataNasc" type="date" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="atletaTime">
+                Time
+              </label>
+              <select class="form-input" id="atletaTime" required>
+                <option value="">Selecione um time</option>
+                <option value="futebol-belem">IFPA Futebol - Belém</option>
+                <option value="volei-castanhal">IFPA Vôlei - Castanhal</option>
+                <option value="basquete-maraba">IFPA Basquete - Marabá</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2" for="atletaPosicao">
+                Posição/Função
+              </label>
+              <input class="form-input" id="atletaPosicao" type="text" placeholder="Ex: Atacante, Levantador, etc.">
+            </div>
+            <div class="flex justify-end">
+              <button type="button" onclick="hideForm('atletaForm')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
+                Cancelar
+              </button>
+              <button type="submit" class="ifpa-green text-white font-bold py-2 px-4 rounded hover:ifpa-green-light">
+                Salvar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 text-white py-6">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h3 class="text-xl font-bold">IFPA</h3>
+            <p class="text-sm text-gray-400">Instituto Federal do Pará</p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        <div class="mt-4 text-center text-sm text-gray-400">
+          <p>&copy; 2023 IFPA - Instituto Federal do Pará. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Notificações -->
+  <div id="notification"
+    class="fixed top-4 right-4 max-w-xs bg-white rounded-lg shadow-lg p-4 hidden transform transition-all duration-300 scale-95 opacity-0 z-50">
+    <div class="flex items-center">
+      <div id="notificationIcon" class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3">
+        <i id="notificationIconSymbol" class="fas"></i>
+      </div>
+      <div class="flex-1">
+        <h4 id="notificationTitle" class="text-sm font-medium"></h4>
+        <p id="notificationMessage" class="text-xs text-gray-500"></p>
+      </div>
+      <button onclick="hideNotification()" class="text-gray-400 hover:text-gray-600">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <script src="./script.js"></script>
+</body>
+
+</html>
